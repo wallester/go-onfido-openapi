@@ -88,3 +88,50 @@ func (o *Location) HasCountryOfResidence() bool {
 func (o *Location) SetCountryOfResidence(v string) {
 	o.CountryOfResidence = &v
 }
+
+func (o Location) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if o.IPAddress != nil {
+		toSerialize["ip_address"] = o.IPAddress
+	}
+	if o.CountryOfResidence != nil {
+		toSerialize["country_of_residence"] = o.CountryOfResidence
+	}
+	return json.Marshal(toSerialize)
+}
+
+type NullableLocation struct {
+	value *Location
+	isSet bool
+}
+
+func (v NullableLocation) Get() *Location {
+	return v.value
+}
+
+func (v *NullableLocation) Set(val *Location) {
+	v.value = val
+	v.isSet = true
+}
+
+func (v NullableLocation) IsSet() bool {
+	return v.isSet
+}
+
+func (v *NullableLocation) Unset() {
+	v.value = nil
+	v.isSet = false
+}
+
+func NewNullableLocation(val *Location) *NullableLocation {
+	return &NullableLocation{value: val, isSet: true}
+}
+
+func (v NullableLocation) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
+
+func (v *NullableLocation) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
+}

@@ -476,6 +476,9 @@ func (o Applicant) MarshalJSON() ([]byte, error) {
 	if o.IdNumbers != nil {
 		toSerialize["id_numbers"] = o.IdNumbers
 	}
+	if o.Location != nil {
+		toSerialize["location"] = o.Location
+	}
 	return json.Marshal(toSerialize)
 }
 
