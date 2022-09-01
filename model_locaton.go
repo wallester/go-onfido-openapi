@@ -86,5 +86,5 @@ func (o *Location) HasCountryOfResidence() bool {
 
 // SetCountryOfResidence gets a reference to the given string and assigns it to the CountryOfResidence field.
 func (o *Location) SetCountryOfResidence(v string) {
-	o.IPAddress = &v
+	o.CountryOfResidence = &v
 }
