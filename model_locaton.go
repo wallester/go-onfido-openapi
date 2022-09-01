@@ -1,5 +1,9 @@
 package onfido_openapi
 
+import (
+	"encoding/json"
+)
+
 // Location struct for Location
 type Location struct {
 	// The IP address of the applicant
