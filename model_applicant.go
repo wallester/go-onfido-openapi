@@ -37,6 +37,7 @@ type Applicant struct {
 	Dob *string `json:"dob,omitempty"`
 	Address *Address `json:"address,omitempty"`
 	IdNumbers *[]IdNumber `json:"id_numbers,omitempty"`
+	Location *Location `json:"location,omitempty"`
 }
 
 // NewApplicant instantiates a new Applicant object
@@ -376,6 +377,38 @@ func (o *Applicant) SetAddress(v Address) {
 	o.Address = &v
 }
 
+// GetLocation returns the Location field value if set, zero value otherwise.
+func (o *Applicant) GetLocation() Location {
+	if o == nil || o.Location == nil {
+		var ret Location
+		return ret
+	}
+	return *o.Location
+}
+
+// GetLocationOk returns a tuple with the Location field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Applicant) GetLocationOk() (*Location, bool) {
+	if o == nil || o.Location == nil {
+		return nil, false
+	}
+	return o.Location, true
+}
+
+// HasLocation returns a boolean if a field has been set.
+func (o *Applicant) HasLocation() bool {
+	if o != nil && o.Location != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetLocation gets a reference to the given Location and assigns it to the Location field.
+func (o *Applicant) SetLocation(v Location) {
+	o.Location = &v
+}
+
 // GetIdNumbers returns the IdNumbers field value if set, zero value otherwise.
 func (o *Applicant) GetIdNumbers() []IdNumber {
 	if o == nil || o.IdNumbers == nil {
@@ -442,6 +475,9 @@ func (o Applicant) MarshalJSON() ([]byte, error) {
 	}
 	if o.IdNumbers != nil {
 		toSerialize["id_numbers"] = o.IdNumbers
+	}
+	if o.Location != nil {
+		toSerialize["location"] = o.Location
 	}
 	return json.Marshal(toSerialize)
 }
