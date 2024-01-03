@@ -1,12 +1,15 @@
 openapi: 3.0.0
 info:
-  title: Onfido API
+  title: Onfido API v3.6
   description: The Onfido API is used to submit check requests.
-  version: 3.1.0
+  version: 3.6.0
+  contact:
+    name: Onfido
+    email: engineering@onfido.com
   license:
     name: MIT
 servers:
-  - url: https://api.{region}.onfido.com/v3.1
+  - url: https://api.{region}.onfido.com/v3.6
     variables:
       region:
         enum:
@@ -76,6 +79,17 @@ paths:
     $ref: paths/reports.yaml#/resume
   /reports/{report_id}/cancel:
     $ref: paths/reports.yaml#/cancel
+  # Workflow Runs
+  /workflow_runs:
+    $ref: paths/workflow_runs.yaml#/workflow_run
+  /workflow_runs/{workflow_run_id}:
+    $ref: paths/workflow_runs.yaml#/workflow_runs
+  /workflow_runs/{workflow_run_id}/tasks:
+    $ref: paths/tasks.yaml#/tasks
+  /workflow_runs/{workflow_run_id}/tasks/{task_id}:
+    $ref: paths/tasks.yaml#/task
+  /workflow_runs/{workflow_run_id}/tasks/{task_id}/complete:
+    $ref: paths/tasks.yaml#/complete_task
   #
   # OTHER ENDPOINTS
   #
@@ -90,3 +104,6 @@ paths:
   # SDK Tokens
   /sdk_token:
     $ref: paths/sdk_tokens.yaml#/sdk_token
+  # Ping
+  /ping:
+    $ref: paths/ping.yaml#/ping
