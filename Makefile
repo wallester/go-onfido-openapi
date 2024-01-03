@@ -5,11 +5,11 @@ mod-vendor:
 	go mod tidy && go mod vendor
 
 validate:
-	openapi-generator validate -i /Users/jakov/go/src/github.com/wallester/go-onfido-openapi/openapi.yaml
+	openapi-generator validate -i openapi.yaml
 
 generate:
 	openapi-generator generate \
-	-i /Users/jakov/go/src/github.com/wallester/go-onfido-openapi/openapi.yaml \
+	-i openapi.yaml \
 	-g go \
 	--additional-properties packageName=onfido_openapi,useTags=true \
 	--git-user-id wallester \
