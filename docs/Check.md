@@ -22,7 +22,7 @@ Name | Type | Description | Notes
 **Asynchronous** | Pointer to **bool** | Defaults to &#x60;true&#x60;. Write-only. If set to &#x60;false&#x60;, you will only receive a response when all reports in your check have completed.  | [optional] 
 **WebhookIds** | Pointer to **[]string** | Optional. An array of strings describing which webhooks to trigger for this check. By default, all webhooks registered in the account will be triggered and this value will be null in the responses. | [optional] 
 **ReportIds** | Pointer to **[]string** | An array of report ids. | [optional] 
-**DocumentIds** | Pointer to **[]string** | Optional. An array of document ids, for use with Document reports only. If omitted, the Document report will use the most recently uploaded document by default. | [optional] 
+**DocumentIds** | Pointer to **[]string** | Optional. Array of strings describing which document to process in checks containing a Document report or a Facial Similarity report, or both. By default, the most recently uploaded document is used. &#x60;document_ids&#x60; is only usable with Document and Facial Similarity reports. | [optional] 
 **Consider** | Pointer to **[]string** | Returns a pre-determined consider sub-result in sandbox for the specific reports in the consider array. | [optional] 
 **SubResult** | Pointer to **string** | Triggers a pre-determined sub-result response for sandbox Document reports. | [optional] 
 

@@ -4,17 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**ReadOnly** | Pointer to **map[string]interface{}** |  | [optional] 
 **Id** | Pointer to **string** | The unique identifier for the report. Read-only. | [optional] [readonly] 
 **CreatedAt** | Pointer to **time.Time** | The date and time at which the report was first initiated. Read-only. | [optional] [readonly] 
 **Href** | Pointer to **string** | The API endpoint to retrieve the report. Read-only. | [optional] [readonly] 
 **Status** | Pointer to **string** | The current state of the report in the checking process. Read-only. | [optional] [readonly] 
 **Result** | Pointer to **string** | The result of the report. Read-only. | [optional] [readonly] 
 **SubResult** | Pointer to **string** | The sub_result of the report. It gives a more detailed result for document reports only, and will be null otherwise. Read-only. | [optional] [readonly] 
-**Breakdown** | Pointer to **map[string]interface{}** | The details of the report. This is specific to each type of report. Read-only. | [optional] [readonly] 
-**Properties** | Pointer to **map[string]interface{}** | The properties associated with the report, if any. Read-only. | [optional] [readonly] 
 **CheckId** | Pointer to **string** | The ID of the check to which the report belongs. Read-only. | [optional] [readonly] 
+**Documents** | Pointer to [**[]ReportDocument**](ReportDocument.md) | Array of objects with document ids that were used in the Onfido engine. [ONLY POPULATED FOR DOCUMENT AND FACIAL SIMILARITY REPORTS] | [optional] 
 **Name** | **string** | The name of the report type. | 
-**Documents** | Pointer to [**[]ReportDocument**](ReportDocument.md) | Array of objects with document ids that were used in the Onfido engine. [ONLY USED IN A DOCUMENT CHECK] | [optional] 
+**Breakdown** | Pointer to [**IdentityEnhancedBreakdown**](IdentityEnhancedBreakdown.md) |  | [optional] 
+**Properties** | Pointer to [**IdentityEnhancedProperties**](IdentityEnhancedProperties.md) |  | [optional] 
 
 ## Methods
 
@@ -34,6 +35,31 @@ will change when the set of required properties is changed
 NewReportWithDefaults instantiates a new Report object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetReadOnly
+
+`func (o *Report) GetReadOnly() map[string]interface{}`
+
+GetReadOnly returns the ReadOnly field if non-nil, zero value otherwise.
+
+### GetReadOnlyOk
+
+`func (o *Report) GetReadOnlyOk() (*map[string]interface{}, bool)`
+
+GetReadOnlyOk returns a tuple with the ReadOnly field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetReadOnly
+
+`func (o *Report) SetReadOnly(v map[string]interface{})`
+
+SetReadOnly sets ReadOnly field to given value.
+
+### HasReadOnly
+
+`func (o *Report) HasReadOnly() bool`
+
+HasReadOnly returns a boolean if a field has been set.
 
 ### GetId
 
@@ -185,56 +211,6 @@ SetSubResult sets SubResult field to given value.
 
 HasSubResult returns a boolean if a field has been set.
 
-### GetBreakdown
-
-`func (o *Report) GetBreakdown() map[string]interface{}`
-
-GetBreakdown returns the Breakdown field if non-nil, zero value otherwise.
-
-### GetBreakdownOk
-
-`func (o *Report) GetBreakdownOk() (*map[string]interface{}, bool)`
-
-GetBreakdownOk returns a tuple with the Breakdown field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetBreakdown
-
-`func (o *Report) SetBreakdown(v map[string]interface{})`
-
-SetBreakdown sets Breakdown field to given value.
-
-### HasBreakdown
-
-`func (o *Report) HasBreakdown() bool`
-
-HasBreakdown returns a boolean if a field has been set.
-
-### GetProperties
-
-`func (o *Report) GetProperties() map[string]interface{}`
-
-GetProperties returns the Properties field if non-nil, zero value otherwise.
-
-### GetPropertiesOk
-
-`func (o *Report) GetPropertiesOk() (*map[string]interface{}, bool)`
-
-GetPropertiesOk returns a tuple with the Properties field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetProperties
-
-`func (o *Report) SetProperties(v map[string]interface{})`
-
-SetProperties sets Properties field to given value.
-
-### HasProperties
-
-`func (o *Report) HasProperties() bool`
-
-HasProperties returns a boolean if a field has been set.
-
 ### GetCheckId
 
 `func (o *Report) GetCheckId() string`
@@ -260,26 +236,6 @@ SetCheckId sets CheckId field to given value.
 
 HasCheckId returns a boolean if a field has been set.
 
-### GetName
-
-`func (o *Report) GetName() string`
-
-GetName returns the Name field if non-nil, zero value otherwise.
-
-### GetNameOk
-
-`func (o *Report) GetNameOk() (*string, bool)`
-
-GetNameOk returns a tuple with the Name field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetName
-
-`func (o *Report) SetName(v string)`
-
-SetName sets Name field to given value.
-
-
 ### GetDocuments
 
 `func (o *Report) GetDocuments() []ReportDocument`
@@ -304,6 +260,76 @@ SetDocuments sets Documents field to given value.
 `func (o *Report) HasDocuments() bool`
 
 HasDocuments returns a boolean if a field has been set.
+
+### GetName
+
+`func (o *Report) GetName() string`
+
+GetName returns the Name field if non-nil, zero value otherwise.
+
+### GetNameOk
+
+`func (o *Report) GetNameOk() (*string, bool)`
+
+GetNameOk returns a tuple with the Name field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetName
+
+`func (o *Report) SetName(v string)`
+
+SetName sets Name field to given value.
+
+
+### GetBreakdown
+
+`func (o *Report) GetBreakdown() IdentityEnhancedBreakdown`
+
+GetBreakdown returns the Breakdown field if non-nil, zero value otherwise.
+
+### GetBreakdownOk
+
+`func (o *Report) GetBreakdownOk() (*IdentityEnhancedBreakdown, bool)`
+
+GetBreakdownOk returns a tuple with the Breakdown field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBreakdown
+
+`func (o *Report) SetBreakdown(v IdentityEnhancedBreakdown)`
+
+SetBreakdown sets Breakdown field to given value.
+
+### HasBreakdown
+
+`func (o *Report) HasBreakdown() bool`
+
+HasBreakdown returns a boolean if a field has been set.
+
+### GetProperties
+
+`func (o *Report) GetProperties() IdentityEnhancedProperties`
+
+GetProperties returns the Properties field if non-nil, zero value otherwise.
+
+### GetPropertiesOk
+
+`func (o *Report) GetPropertiesOk() (*IdentityEnhancedProperties, bool)`
+
+GetPropertiesOk returns a tuple with the Properties field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetProperties
+
+`func (o *Report) SetProperties(v IdentityEnhancedProperties)`
+
+SetProperties sets Properties field to given value.
+
+### HasProperties
+
+`func (o *Report) HasProperties() bool`
+
+HasProperties returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

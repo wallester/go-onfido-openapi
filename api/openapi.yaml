@@ -1,14 +1,17 @@
 openapi: 3.0.0
 info:
+  contact:
+    email: engineering@onfido.com
+    name: Onfido
   description: The Onfido API is used to submit check requests.
   license:
     name: MIT
-  title: Onfido API
-  version: 3.1.0
+  title: Onfido API v3.6
+  version: 3.6.0
 externalDocs:
   url: https://documentation.onfido.com
 servers:
-- url: https://api.{region}.onfido.com/v3.1
+- url: "https://api.{region}.onfido.com/v3.6"
   variables:
     region:
       default: eu
@@ -198,33 +201,10 @@ paths:
         Documents are uploaded using this endpoint. Along with the file upload the relevant document type must be specified. Documents must be uploaded as a multipart form. The valid file types are: jpg, png and pdf. The file size must be between 2KB and 3MB.
       operationId: upload_document
       requestBody:
-        $ref: '#/components/requestBodies/inline_object'
         content:
           multipart/form-data:
             schema:
-              properties:
-                applicant_id:
-                  description: The ID of the applicant whose document is being uploaded.
-                  type: string
-                type:
-                  description: The type of document.
-                  type: string
-                file:
-                  description: The file to be uploaded.
-                  format: binary
-                  type: string
-                side:
-                  description: Either the `front` or `back` of the document.
-                  type: string
-                issuing_country:
-                  description: The issuing country of the document, a 3-letter ISO
-                    code.
-                  type: string
-              required:
-              - applicant_id
-              - file
-              - type
-              type: object
+              $ref: '#/components/schemas/upload_document_request'
         required: true
       responses:
         "201":
@@ -317,26 +297,10 @@ paths:
         You can upload live photos to this endpoint. Like document upload, files must be uploaded as a multipart form. Valid file types are jpg, png and pdf. The file size must be between 32KB and 10MB. Live photos are validated at the point of upload to check that they contain exactly one face. This validation can be disabled by setting the advanced_validation argument to false.
       operationId: upload_live_photo
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_1'
         content:
           multipart/form-data:
             schema:
-              properties:
-                applicant_id:
-                  type: string
-                file:
-                  description: The file to be uploaded.
-                  format: binary
-                  type: string
-                advanced_validation:
-                  default: true
-                  description: Validates that the live photo contains exactly one
-                    face.
-                  type: boolean
-              required:
-              - applicant_id
-              - file
-              type: object
+              $ref: '#/components/schemas/upload_live_photo_request'
         required: true
       responses:
         "201":
@@ -694,6 +658,197 @@ paths:
                 $ref: '#/components/schemas/Error'
           description: Unexpected error
       summary: This endpoint is for cancelling individual paused reports.
+  /workflow_runs:
+    get:
+      operationId: list_workflow_runs
+      parameters:
+      - description: "The number of the page to be retrieved. If not specified, defaults\
+          \ to 1."
+        in: query
+        name: page
+        schema:
+          default: 1
+          type: integer
+      - description: "A list of comma separated status values to filter the results.\
+          \ Possible values are 'processing', 'awaiting_input', 'approved', 'declined',\
+          \ 'review', 'abandoned' and 'error'."
+        in: query
+        name: status
+        schema:
+          type: string
+      - description: A ISO-8601 date to filter results with a created date greater
+          than (after) the one provided.
+        in: query
+        name: created_at_gt
+        schema:
+          format: date-time
+          type: string
+      - description: A ISO-8601 date to filter results with a created date less than
+          (before) the one provided.
+        in: query
+        name: created_at_lt
+        schema:
+          format: date-time
+          type: string
+      - description: "A string with the value 'desc' or 'asc' that allows to sort\
+          \ the returned list by the completed datetime either descending or ascending,\
+          \ respectively. If not specified, defaults to 'desc'."
+        in: query
+        name: sort
+        schema:
+          default: desc
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/workflow_runs_list'
+          description: An array of Workflow Run objects matching the query parameters.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: List Workflow Runs.
+    post:
+      operationId: create_workflow_run
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/create_workflow_run_request'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/workflow_run'
+          description: A Workflow Run object.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Create a Workflow Run.
+  /workflow_runs/{workflow_run_id}:
+    get:
+      operationId: retrieve_workflow_run
+      parameters:
+      - description: The unique identifier of the Workflow Run.
+        in: path
+        name: workflow_run_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/workflow_run'
+          description: A Workflow Run object.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: A single workflow run can be retrieved by calling this endpoint with
+        the unique identifier of the Workflow Run.
+  /workflow_runs/{workflow_run_id}/tasks:
+    get:
+      operationId: list_tasks
+      parameters:
+      - description: The unique identifier of the Workflow Run to which the Tasks
+          belong.
+        in: path
+        name: workflow_run_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/list_tasks_200_response'
+          description: "An array of subset Task objects that were already started\
+            \ or completed, ordered by the created_at field, in ascending order."
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: The tasks of a Workflow can be retrieved by calling this endpoint with
+        the unique identifier of the Workflow Run.
+  /workflow_runs/{workflow_run_id}/tasks/{task_id}:
+    get:
+      operationId: retrieve_task
+      parameters:
+      - description: The unique identifier of the Workflow Run to which the Task belongs.
+        in: path
+        name: workflow_run_id
+        required: true
+        schema:
+          type: string
+      - description: The identifier of the Task you want to retrieve.
+        in: path
+        name: task_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/task'
+          description: A Task object.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: A single task can be retrieved by calling this endpoint with the unique
+        identifier of the Task and Workflow Run.
+  /workflow_runs/{workflow_run_id}/tasks/{task_id}/complete:
+    post:
+      operationId: complete_task
+      parameters:
+      - description: The unique identifier of the Workflow Run to which the Task belongs.
+        in: path
+        name: workflow_run_id
+        required: true
+        schema:
+          type: string
+      - description: The identifier of the Task you want to complete.
+        in: path
+        name: task_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/complete_task_request'
+        required: true
+      responses:
+        "200":
+          description: An empty response body.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Completes a Send / Receive Data task.
   /webhooks:
     get:
       operationId: list_webhooks
@@ -848,20 +1003,31 @@ paths:
                 $ref: '#/components/schemas/Error'
           description: Unexpected error
       summary: Generate a SDK token
+  /ping:
+    get:
+      operationId: ping
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Regional base URL is operational
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Run a health check on the Onfido API
 components:
-  requestBodies:
-    inline_object_1:
+  responses:
+    default_error:
       content:
-        multipart/form-data:
+        application/json:
           schema:
-            $ref: '#/components/schemas/inline_object_1'
-      required: true
-    inline_object:
-      content:
-        multipart/form-data:
-          schema:
-            $ref: '#/components/schemas/inline_object'
-      required: true
+            $ref: '#/components/schemas/Error'
+      description: Unexpected error
   schemas:
     applicants_list:
       example:
@@ -879,10 +1045,8 @@ components:
             building_number: building_number
             line1: line1
             sub_street: sub_street
-          dob: 2000-01-23
           sandbox: true
           created_at: 2000-01-23T04:56:07.000+00:00
-          delete_at: 2000-01-23T04:56:07.000+00:00
           last_name: last_name
           id_numbers:
           - type: type
@@ -891,6 +1055,15 @@ components:
           - type: type
             state_code: state_code
             value: value
+          dob: 2000-01-23
+          consents:
+          - key: ""
+          - key: ""
+          delete_at: 2000-01-23T04:56:07.000+00:00
+          phone_number: phone_number
+          location:
+            country_of_residence: country_of_residence
+            ip_address: ip_address
           id: id
           href: href
           first_name: first_name
@@ -908,10 +1081,8 @@ components:
             building_number: building_number
             line1: line1
             sub_street: sub_street
-          dob: 2000-01-23
           sandbox: true
           created_at: 2000-01-23T04:56:07.000+00:00
-          delete_at: 2000-01-23T04:56:07.000+00:00
           last_name: last_name
           id_numbers:
           - type: type
@@ -920,6 +1091,15 @@ components:
           - type: type
             state_code: state_code
             value: value
+          dob: 2000-01-23
+          consents:
+          - key: ""
+          - key: ""
+          delete_at: 2000-01-23T04:56:07.000+00:00
+          phone_number: phone_number
+          location:
+            country_of_residence: country_of_residence
+            ip_address: ip_address
           id: id
           href: href
           first_name: first_name
@@ -945,10 +1125,8 @@ components:
           building_number: building_number
           line1: line1
           sub_street: sub_street
-        dob: 2000-01-23
         sandbox: true
         created_at: 2000-01-23T04:56:07.000+00:00
-        delete_at: 2000-01-23T04:56:07.000+00:00
         last_name: last_name
         id_numbers:
         - type: type
@@ -957,6 +1135,15 @@ components:
         - type: type
           state_code: state_code
           value: value
+        dob: 2000-01-23
+        consents:
+        - key: ""
+        - key: ""
+        delete_at: 2000-01-23T04:56:07.000+00:00
+        phone_number: phone_number
+        location:
+          country_of_residence: country_of_residence
+          ip_address: ip_address
         id: id
         href: href
         first_name: first_name
@@ -992,8 +1179,8 @@ components:
           description: The applicant’s surname
           type: string
         email:
-          description: The applicant’s email address. Required if doing a US check,
-            or a UK check for which `applicant_provides_data` is `true`.
+          description: "The applicant’s email address. Required if doing a US check,\
+            \ or a UK check for which `applicant_provides_data` is `true`."
           type: string
         dob:
           description: The applicant’s date of birth
@@ -1005,6 +1192,17 @@ components:
           items:
             $ref: '#/components/schemas/id_number'
           type: array
+        phone_number:
+          description: The applicant’s phone number
+          type: string
+        consents:
+          items:
+            additionalProperties: true
+            description: The applicant’s consents
+            type: object
+          type: array
+        location:
+          $ref: '#/components/schemas/location'
       type: object
     documents_list:
       example:
@@ -1034,6 +1232,18 @@ components:
           items:
             $ref: '#/components/schemas/document'
           type: array
+      type: object
+    location:
+      example:
+        country_of_residence: country_of_residence
+        ip_address: ip_address
+      properties:
+        ip_address:
+          description: The applicant's ip address.
+          type: string
+        country_of_residence:
+          description: The applicant's country of residence.
+          type: string
       type: object
     document:
       example:
@@ -1068,11 +1278,11 @@ components:
           description: The type of document
           type: string
         side:
-          description: The side of the document, if applicable. The possible values
-            are front and back
+          description: "The side of the document, if applicable. The possible values\
+            \ are front and back"
           type: string
         issuing_country:
-          description: The issuing country of the document, a 3-letter ISO code.
+          description: "The issuing country of the document, a 3-letter ISO code."
           type: string
         href:
           description: The uri of this resource
@@ -1322,8 +1532,8 @@ components:
           readOnly: true
           type: string
         result:
-          description: The overall result of the check, based on the results of the
-            constituent reports. Read-only.
+          description: "The overall result of the check, based on the results of the\
+            \ constituent reports. Read-only."
           readOnly: true
           type: string
         download_uri:
@@ -1332,13 +1542,13 @@ components:
           readOnly: true
           type: string
         form_uri:
-          description: A link to the applicant form, if `applicant_provides_data`
-            is `true`. Read-only.
+          description: "A link to the applicant form, if `applicant_provides_data`\
+            \ is `true`. Read-only."
           readOnly: true
           type: string
         redirect_uri:
-          description: For checks where `applicant_provides_data` is `true`, redirect
-            to this URI when the applicant has submitted their data. Read-only.
+          description: "For checks where `applicant_provides_data` is `true`, redirect\
+            \ to this URI when the applicant has submitted their data. Read-only."
           readOnly: true
           type: string
         results_uri:
@@ -1355,9 +1565,9 @@ components:
           description: The ID of the applicant to do the check on.
           type: string
         privacy_notices_read_consent_given:
-          description: Indicates whether the privacy notices and terms of service
-            have been read and, where specific laws require, that consent has been
-            given for Onfido.
+          description: "Indicates whether the privacy notices and terms of service\
+            \ have been read and, where specific laws require, that consent has been\
+            \ given for Onfido."
           type: boolean
         tags:
           description: Array of tags being assigned to this check.
@@ -1379,9 +1589,9 @@ components:
           type: boolean
           writeOnly: true
         webhook_ids:
-          description: Optional. An array of strings describing which webhooks to
-            trigger for this check. By default, all webhooks registered in the account
-            will be triggered and this value will be null in the responses.
+          description: "Optional. An array of strings describing which webhooks to\
+            \ trigger for this check. By default, all webhooks registered in the account\
+            \ will be triggered and this value will be null in the responses."
           items:
             type: string
           type: array
@@ -1391,9 +1601,10 @@ components:
             type: string
           type: array
         document_ids:
-          description: Optional. An array of document ids, for use with Document reports
-            only. If omitted, the Document report will use the most recently uploaded
-            document by default.
+          description: "Optional. Array of strings describing which document to process\
+            \ in checks containing a Document report or a Facial Similarity report,\
+            \ or both. By default, the most recently uploaded document is used. `document_ids`\
+            \ is only usable with Document and Facial Similarity reports."
           items:
             type: string
           type: array
@@ -1413,36 +1624,8 @@ components:
     reports_list:
       example:
         reports:
-        - result: result
-          documents:
-          - id: id
-          - id: id
-          breakdown:
-            key: '{}'
-          name: name
-          created_at: 2000-01-23T04:56:07.000+00:00
-          sub_result: sub_result
-          check_id: check_id
-          id: id
-          href: href
-          properties:
-            key: '{}'
-          status: status
-        - result: result
-          documents:
-          - id: id
-          - id: id
-          breakdown:
-            key: '{}'
-          name: name
-          created_at: 2000-01-23T04:56:07.000+00:00
-          sub_result: sub_result
-          check_id: check_id
-          id: id
-          href: href
-          properties:
-            key: '{}'
-          status: status
+        - null
+        - null
       properties:
         reports:
           items:
@@ -1450,76 +1633,149 @@ components:
           type: array
       type: object
     report:
+      discriminator:
+        mapping:
+          facial_similarity_photo: '#/components/schemas/facial_similarity_photo_report'
+          known_faces: '#/components/schemas/known_faces_report'
+          photo_fully_auto: '#/components/schemas/photo_fully_auto_report'
+          facial_similarity_video: '#/components/schemas/facial_similarity_video_report'
+          document: '#/components/schemas/document_report'
+          document_with_address_information: '#/components/schemas/document_with_address_information_report'
+          document_with_driving_licence_information: '#/components/schemas/document_with_driving_licence_information_report'
+          document_with_driver_verification: '#/components/schemas/document_with_driver_verification_report'
+          proof_of_address: '#/components/schemas/proof_of_address_report'
+          watchlist_enhanced: '#/components/schemas/watchlist_enhanced_report'
+          watchlist_standard: '#/components/schemas/watchlist_standard_report'
+          watchlist_peps_only: '#/components/schemas/watchlist_peps_only_report'
+          watchlist_sanctions_only: '#/components/schemas/watchlist_sanctions_only_report'
+          right_to_work: '#/components/schemas/right_to_work_report'
+          identity_enhanced: '#/components/schemas/identity_enhanced_report'
+        propertyName: name
+      oneOf:
+      - $ref: '#/components/schemas/facial_similarity_photo_report'
+      - $ref: '#/components/schemas/known_faces_report'
+      - $ref: '#/components/schemas/photo_fully_auto_report'
+      - $ref: '#/components/schemas/facial_similarity_video_report'
+      - $ref: '#/components/schemas/document_report'
+      - $ref: '#/components/schemas/document_with_address_information_report'
+      - $ref: '#/components/schemas/document_with_driving_licence_information_report'
+      - $ref: '#/components/schemas/document_with_driver_verification_report'
+      - $ref: '#/components/schemas/proof_of_address_report'
+      - $ref: '#/components/schemas/watchlist_enhanced_report'
+      - $ref: '#/components/schemas/watchlist_standard_report'
+      - $ref: '#/components/schemas/watchlist_peps_only_report'
+      - $ref: '#/components/schemas/watchlist_sanctions_only_report'
+      - $ref: '#/components/schemas/right_to_work_report'
+      - $ref: '#/components/schemas/identity_enhanced_report'
+    workflow_runs_list:
+      items:
+        $ref: '#/components/schemas/workflow_run'
+      type: array
+    workflow_run:
       example:
-        result: result
-        documents:
-        - id: id
-        - id: id
-        breakdown:
-          key: '{}'
-        name: name
+        workflow_id: workflow_id
+        reasons:
+        - reasons
+        - reasons
+        link:
+          expires_at: 2000-01-23T04:56:07.000+00:00
+          expired_redirect_url: expired_redirect_url
+          completed_redirect_url: completed_redirect_url
+          language: language
+          url: url
         created_at: 2000-01-23T04:56:07.000+00:00
-        sub_result: sub_result
-        check_id: check_id
+        error:
+          type: type
+          message: message
+        tags:
+        - tags
+        - tags
+        output: "{}"
+        applicant_id: applicant_id
+        updated_at: 2000-01-23T04:56:07.000+00:00
         id: id
-        href: href
-        properties:
-          key: '{}'
+        workflow_version_id: workflow_version_id
+        dashboard_url: dashboard_url
         status: status
       properties:
         id:
-          description: The unique identifier for the report. Read-only.
-          readOnly: true
+          description: The unique identifier for the Workflow Run.
           type: string
-        created_at:
-          description: The date and time at which the report was first initiated.
-            Read-only.
-          format: date-time
-          readOnly: true
+        applicant_id:
+          description: The unique identifier for the Applicant.
           type: string
-        href:
-          description: The API endpoint to retrieve the report. Read-only.
-          readOnly: true
+        workflow_id:
+          description: The unique identifier for the Workflow.
+          type: string
+        workflow_version_id:
+          description: The identifier for the Workflow version.
+          type: string
+        dashboard_url:
+          description: The URL for viewing the Workflow Run results on your Onfido
+            Dashboard.
           type: string
         status:
-          description: The current state of the report in the checking process. Read-only.
-          readOnly: true
+          description: "The status of the Workflow Run. Possible values are 'processing',\
+            \ 'awaiting_input', 'approved', 'declined', 'review', 'abandoned' and\
+            \ 'error'."
           type: string
-        result:
-          description: The result of the report. Read-only.
-          readOnly: true
-          type: string
-        sub_result:
-          description: The sub_result of the report. It gives a more detailed result
-            for document reports only, and will be null otherwise. Read-only.
-          readOnly: true
-          type: string
-        breakdown:
-          additionalProperties: true
-          description: The details of the report. This is specific to each type of
-            report. Read-only.
-          readOnly: true
+        output:
+          description: Output object contains all of the properties configured on
+            the Workflow version.
           type: object
-        properties:
-          additionalProperties: true
-          description: The properties associated with the report, if any. Read-only.
-          readOnly: true
-          type: object
-        check_id:
-          description: The ID of the check to which the report belongs. Read-only.
-          readOnly: true
-          type: string
-        name:
-          description: The name of the report type.
-          type: string
-        documents:
-          description: Array of objects with document ids that were used in the Onfido
-            engine. [ONLY USED IN A DOCUMENT CHECK]
+        reasons:
+          description: The reasons the Workflow Run outcome was reached. Configurable
+            when creating the Workflow version.
           items:
-            $ref: '#/components/schemas/report_document'
+            type: string
           type: array
-      required:
-      - name
+        error:
+          $ref: '#/components/schemas/workflow_run_error'
+        tags:
+          description: Tags or labels assigned to the workflow run.
+          items:
+            type: string
+          type: array
+        link:
+          $ref: '#/components/schemas/workflow_run_link'
+        created_at:
+          description: The date and time when the Workflow Run was created.
+          format: date-time
+          type: string
+        updated_at:
+          description: The date and time when the Workflow Run was last updated.
+          format: date-time
+          type: string
+      type: object
+    task:
+      example:
+        output: "{}"
+        input: "{}"
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: id
+        task_def_id: task_def_id
+      properties:
+        id:
+          description: The identifier for the Task.
+          type: string
+        task_def_id:
+          description: The identifier for the Task Definition.
+          type: string
+        input:
+          description: Input object with the fields used by the Task to execute.
+          type: object
+        output:
+          description: Output object with the fields produced by the Task execution.
+          type: object
+        created_at:
+          description: The date and time when the Task was created.
+          format: date-time
+          type: string
+        updated_at:
+          description: The date and time when the Task was last updated.
+          format: date-time
+          type: string
       type: object
     webhooks_list:
       example:
@@ -1699,12 +1955,12 @@ components:
           description: The postcode or ZIP of the applicant’s address
           type: string
         country:
-          description: The 3 character ISO country code of this address. For example,
-            GBR is the country code for the United Kingdom
+          description: "The 3 character ISO country code of this address. For example,\
+            \ GBR is the country code for the United Kingdom"
           type: string
         state:
-          description: The address state. US states must use the USPS abbreviation
-            (see also ISO 3166-2:US), for example AK, CA, or TX.
+          description: "The address state. US states must use the USPS abbreviation\
+            \ (see also ISO 3166-2:US), for example AK, CA, or TX."
           type: string
         line1:
           description: Line 1 of the applicant's address
@@ -1723,8 +1979,8 @@ components:
         value: value
       properties:
         type:
-          description: Type of ID number. Valid values are `ssn`, `social_insurance`,
-            `tax_id`, `identity_card`, `passport` and `driving_license`
+          description: "Type of ID number. Valid values are `ssn`, `social_insurance`,\
+            \ `tax_id`, `identity_card`, `passport` and `driving_license`"
           type: string
         value:
           description: Value of ID number
@@ -1734,15 +1990,651 @@ components:
             only)
           type: string
       type: object
+    facial_similarity_photo_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/facial_similarity_photo_breakdown'
+        type: object
+    known_faces_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/known_faces_breakdown'
+          properties:
+            $ref: '#/components/schemas/known_faces_properties'
+        type: object
+    photo_fully_auto_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/photo_fully_auto_breakdown'
+        type: object
+    facial_similarity_video_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/facial_similarity_video_breakdown'
+        type: object
+    document_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/document_breakdown'
+          properties:
+            $ref: '#/components/schemas/document_properties'
+        type: object
+    document_with_address_information_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/document_breakdown'
+          properties:
+            $ref: '#/components/schemas/document_properties'
+        type: object
+    document_with_driving_licence_information_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/document_breakdown'
+          properties:
+            $ref: '#/components/schemas/document_properties'
+        type: object
+    document_with_driver_verification_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/document_breakdown'
+          properties:
+            $ref: '#/components/schemas/document_with_driver_verification_report_allOf_properties'
+        type: object
+    proof_of_address_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/proof_of_address_breakdown'
+          properties:
+            $ref: '#/components/schemas/proof_of_address_properties'
+        type: object
+    watchlist_enhanced_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/watchlist_enhanced_breakdown'
+          properties:
+            $ref: '#/components/schemas/watchlist_enhanced_properties'
+        type: object
+    watchlist_standard_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/watchlist_standard_breakdown'
+          properties:
+            $ref: '#/components/schemas/watchlist_standard_properties'
+        type: object
+    watchlist_peps_only_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/watchlist_standard_breakdown'
+          properties:
+            $ref: '#/components/schemas/watchlist_standard_properties'
+        type: object
+    watchlist_sanctions_only_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/watchlist_standard_breakdown'
+          properties:
+            $ref: '#/components/schemas/watchlist_standard_properties'
+        type: object
+    right_to_work_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/right_to_work_breakdown'
+          properties:
+            $ref: '#/components/schemas/right_to_work_properties'
+        type: object
+    identity_enhanced_report:
+      allOf:
+      - $ref: '#/components/schemas/report_common'
+      - properties:
+          breakdown:
+            $ref: '#/components/schemas/identity_enhanced_breakdown'
+          properties:
+            $ref: '#/components/schemas/identity_enhanced_properties'
+        type: object
+    report_common:
+      properties:
+        readOnly: {}
+        id:
+          description: The unique identifier for the report. Read-only.
+          readOnly: true
+          type: string
+        created_at:
+          description: The date and time at which the report was first initiated.
+            Read-only.
+          format: date-time
+          readOnly: true
+          type: string
+        href:
+          description: The API endpoint to retrieve the report. Read-only.
+          readOnly: true
+          type: string
+        status:
+          description: The current state of the report in the checking process. Read-only.
+          readOnly: true
+          type: string
+        result:
+          description: The result of the report. Read-only.
+          readOnly: true
+          type: string
+        sub_result:
+          description: "The sub_result of the report. It gives a more detailed result\
+            \ for document reports only, and will be null otherwise. Read-only."
+          readOnly: true
+          type: string
+        check_id:
+          description: The ID of the check to which the report belongs. Read-only.
+          readOnly: true
+          type: string
+        documents:
+          description: "Array of objects with document ids that were used in the Onfido\
+            \ engine. [ONLY POPULATED FOR DOCUMENT AND FACIAL SIMILARITY REPORTS]"
+          items:
+            $ref: '#/components/schemas/report_document'
+          type: array
+        name:
+          description: The name of the report type.
+          type: string
+        breakdown:
+          description: The details of the report. This is specific to each type of
+            report.
+          type: object
+        properties:
+          additionalProperties: true
+          description: "The properties associated with the report, if any. Read-only."
+          readOnly: true
+          type: object
+      required:
+      - name
+      type: object
+    facial_similarity_photo_breakdown:
+      properties:
+        face_comparison:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_face_comparison'
+        image_integrity:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_image_integrity'
+        visual_authenticity:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_visual_authenticity'
+      type: object
+    known_faces_breakdown:
+      properties:
+        previously_seen_faces:
+          $ref: '#/components/schemas/known_faces_breakdown_previously_seen_faces'
+        image_integrity:
+          $ref: '#/components/schemas/known_faces_breakdown_image_integrity'
+      type: object
+    known_faces_properties:
+      properties:
+        matches:
+          description: Returns any matching applicant IDs as entries inside a matches
+            array under a properties bag.
+          items:
+            $ref: '#/components/schemas/known_faces_properties_matches_inner'
+          type: array
+      type: object
+    photo_fully_auto_breakdown:
+      properties:
+        face_comparison:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_face_comparison'
+        image_integrity:
+          $ref: '#/components/schemas/photo_fully_auto_breakdown_image_integrity'
+        visual_authenticity:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_visual_authenticity'
+      type: object
+    facial_similarity_video_breakdown:
+      properties:
+        face_comparison:
+          $ref: '#/components/schemas/facial_similarity_video_breakdown_face_comparison'
+        image_integrity:
+          $ref: '#/components/schemas/facial_similarity_video_breakdown_image_integrity'
+        visual_authenticity:
+          $ref: '#/components/schemas/facial_similarity_video_breakdown_visual_authenticity'
+      type: object
+    document_breakdown:
+      properties:
+        data_comparison:
+          $ref: '#/components/schemas/document_breakdown_data_comparison'
+        data_validation:
+          $ref: '#/components/schemas/document_breakdown_data_validation'
+        image_integrity:
+          $ref: '#/components/schemas/document_breakdown_image_integrity'
+        visual_authenticity:
+          $ref: '#/components/schemas/document_breakdown_visual_authenticity'
+        data_consistency:
+          $ref: '#/components/schemas/document_breakdown_data_consistency'
+        police_record:
+          $ref: '#/components/schemas/document_breakdown_police_record'
+        compromised_document:
+          $ref: '#/components/schemas/document_breakdown_compromised_document'
+        age_validation:
+          $ref: '#/components/schemas/document_breakdown_age_validation'
+        issuing_authority:
+          $ref: '#/components/schemas/document_breakdown_issuing_authority'
+      type: object
+    document_properties:
+      properties:
+        date_of_birth:
+          format: date
+          type: string
+        date_of_expiry:
+          format: date
+          type: string
+        document_numbers:
+          items:
+            $ref: '#/components/schemas/document_properties_document_numbers_inner'
+          type: array
+        document_type:
+          type: string
+        first_name:
+          type: string
+        gender:
+          type: string
+        issuing_country:
+          type: string
+        last_name:
+          type: string
+        nationality:
+          type: string
+        issuing_state:
+          type: string
+        issuing_date:
+          format: date
+          type: string
+        categorisation:
+          type: string
+        mrz_line1:
+          type: string
+        mrz_line2:
+          type: string
+        mrz_line3:
+          type: string
+        address:
+          type: string
+        place_of_birth:
+          type: string
+        spouse_name:
+          type: string
+        widow_name:
+          type: string
+        alias_name:
+          type: string
+        issuing_authority:
+          type: string
+        real_id_compliance:
+          type: string
+        address_lines:
+          $ref: '#/components/schemas/document_properties_address_lines'
+        barcode:
+          items:
+            $ref: '#/components/schemas/document_properties_barcode_inner'
+          type: array
+        nfc:
+          $ref: '#/components/schemas/document_properties_nfc'
+        driving_licence_information:
+          $ref: '#/components/schemas/document_properties_driving_licence_information'
+        document_classification:
+          $ref: '#/components/schemas/document_properties_document_classification'
+        extracted_data:
+          $ref: '#/components/schemas/document_properties_extracted_data'
+      type: object
+    proof_of_address_breakdown:
+      properties:
+        data_comparison:
+          $ref: '#/components/schemas/proof_of_address_breakdown_data_comparison'
+        document_classification:
+          $ref: '#/components/schemas/proof_of_address_breakdown_document_classification'
+        image_integrity:
+          $ref: '#/components/schemas/proof_of_address_breakdown_image_integrity'
+      type: object
+    proof_of_address_properties:
+      properties:
+        address:
+          description: This property provides the address on the document.
+          type: string
+        document_type:
+          description: This property provides the document type according to the set
+            of supported documents.
+          type: string
+        first_names:
+          description: "This property provides the first names on the document, including\
+            \ any initials and middle names."
+          type: string
+        last_names:
+          description: This property provided the last names on the document.
+          type: string
+        issue_date:
+          description: This property provides the issue date of the document.
+          format: date
+          type: string
+        issuer:
+          description: "This property provides the document issuer (e.g. HSBC, British\
+            \ Gas)."
+          type: string
+        summary_period_start:
+          description: This property provides the summary period start date.
+          format: date
+          type: string
+        summary_period_end:
+          description: This property provides the summary period end date.
+          format: date
+          type: string
+      type: object
+    watchlist_enhanced_breakdown:
+      properties:
+        politically_exposed_person:
+          $ref: '#/components/schemas/watchlist_enhanced_breakdown_politically_exposed_person'
+        sanction:
+          $ref: '#/components/schemas/watchlist_enhanced_breakdown_sanction'
+        adverse_media:
+          $ref: '#/components/schemas/watchlist_enhanced_breakdown_adverse_media'
+        monitored_lists:
+          $ref: '#/components/schemas/watchlist_enhanced_breakdown_monitored_lists'
+      type: object
+    watchlist_enhanced_properties:
+      properties:
+        records:
+          description: "Returns any matches including, but not limited to, name and\
+            \ date of birth of match, aliases and associates, and relevant events\
+            \ and sources."
+          items:
+            type: string
+          type: array
+      type: object
+    watchlist_standard_breakdown:
+      properties:
+        sanction:
+          $ref: '#/components/schemas/watchlist_enhanced_breakdown_sanction'
+        politically_exposed_person:
+          $ref: '#/components/schemas/watchlist_enhanced_breakdown_politically_exposed_person'
+        legal_and_regulatory_warnings:
+          $ref: '#/components/schemas/watchlist_enhanced_breakdown_monitored_lists'
+      type: object
+    watchlist_standard_properties:
+      properties:
+        records:
+          description: "Returns any matches including, but not limited to, name and\
+            \ date of birth of match, aliases and associates, and relevant events\
+            \ and sources."
+          items:
+            type: string
+          type: array
+      type: object
+    right_to_work_breakdown:
+      properties:
+        right_to_work:
+          $ref: '#/components/schemas/right_to_work_breakdown_right_to_work'
+        data_comparison:
+          $ref: '#/components/schemas/document_breakdown_data_comparison'
+        data_validation:
+          $ref: '#/components/schemas/right_to_work_breakdown_data_validation'
+        image_integrity:
+          $ref: '#/components/schemas/right_to_work_breakdown_image_integrity'
+        visual_authenticity:
+          $ref: '#/components/schemas/right_to_work_breakdown_visual_authenticity'
+        data_consistency:
+          $ref: '#/components/schemas/right_to_work_breakdown_data_consistency'
+        police_record:
+          $ref: '#/components/schemas/document_breakdown_police_record'
+        compromised_document:
+          $ref: '#/components/schemas/document_breakdown_compromised_document'
+        age_validation:
+          $ref: '#/components/schemas/right_to_work_breakdown_age_validation'
+        share_code_validation:
+          $ref: '#/components/schemas/right_to_work_breakdown_share_code_validation'
+      type: object
+    right_to_work_properties:
+      description: Returns the information contained in the submitted document.
+      properties:
+        nationality:
+          type: string
+        last_name:
+          type: string
+        issuing_country:
+          type: string
+        gender:
+          type: string
+        first_name:
+          type: string
+        document_type:
+          type: string
+        document_numbers:
+          items:
+            $ref: '#/components/schemas/document_properties_document_numbers_inner'
+          type: array
+        date_of_expiry:
+          format: date
+          type: string
+        date_of_birth:
+          format: date
+          type: string
+        document_version:
+          type: string
+        issuing_date:
+          format: date
+          type: string
+        mrz_line1:
+          type: string
+        mrz_line2:
+          type: string
+        place_of_birth:
+          type: string
+        issuing_authority:
+          type: string
+      type: object
+    identity_enhanced_breakdown:
+      properties:
+        sources:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_sources'
+        address:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_address'
+        date_of_birth:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_date_of_birth'
+        mortality:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_mortality'
+      type: object
+    identity_enhanced_properties:
+      properties:
+        matched_address:
+          description: Returns address number which has been matched.
+          type: number
+        matched_addresses:
+          description: Returns array of sources which contain matched addresses for
+            the corresponding address number.
+          items:
+            $ref: '#/components/schemas/identity_enhanced_properties_matched_addresses_inner'
+          type: array
+      type: object
     report_document:
-      example:
-        id: id
       properties:
         id:
           description: ID of uploaded document to use.
           type: string
       required:
       - id
+      type: object
+    photo_reasons:
+      properties:
+        digital_tampering:
+          description: "Flags when evidence is found that the image was manipulated\
+            \ by Photoshop, or other software."
+          type: string
+        fake_webcam:
+          description: Flags when evidence is found that a fake webcam was used.
+          type: string
+        time_of_capture:
+          description: Flags when evidence is found that the live photo was taken
+            more than 24 hours before live photo upload.
+          type: string
+        emulator:
+          description: Flags when evidence is found that an Android emulator was used.
+          type: string
+        reasons:
+          description: "Additional comma separated details such as the exact digital\
+            \ tampering software used, or the name of the fake webcam."
+          type: string
+      type: object
+    photo_auto_reasons:
+      properties:
+        digital_tampering:
+          description: "Flags when evidence is found that the image was manipulated\
+            \ by Photoshop, or other software."
+          type: string
+        fake_webcam:
+          description: Flags when evidence is found that a fake webcam was used.
+          type: string
+        time_of_capture:
+          description: Flags when evidence is found that the live photo was taken
+            more than 24 hours before live photo upload.
+          type: string
+        emulator:
+          description: Flags when evidence is found that an Android emulator was used.
+          type: string
+        reasons:
+          description: "Additional comma separated details such as the exact digital\
+            \ tampering software used, or the name of the fake webcam."
+          type: string
+      type: object
+    video_reasons:
+      properties:
+        fake_webcam:
+          description: Flags when evidence is found that a fake webcam was used.
+          type: string
+        challenge_reuse:
+          description: Flags when evidence is found that the video was uploaded in
+            an attempt to circumvent the randomness of the speaking and head turn
+            challenges
+          type: string
+        emulator:
+          description: Flags when evidence is found that an Android emulator was used.
+          type: string
+        reasons:
+          description: Additional comma separated details such as the name of the
+            fake webcam.
+          type: string
+      type: object
+    document_IQ_reasons:
+      properties:
+        dark_photo:
+          description: When an image of the document is too dark to be able to see
+            data points.
+          type: string
+        glare_on_photo:
+          description: When there is light reflecting on the document causing glare
+            to obstruct data points.
+          type: string
+        blurred_photo:
+          description: When data points are blurred and no reference can be made elsewhere
+            in the document or if the data points are too blurry and 'they could be
+            something else'.
+          type: string
+        covered_photo:
+          description: When data points have been covered either by the applicant
+            or by another object such as a sticker.
+          type: string
+        other_photo_issue:
+          description: "Any other reason not listed, such as when holograms are obscuring\
+            \ data points."
+          type: string
+        damaged_document:
+          description: When a document is damaged and we are unable to make out data
+            points.
+          type: string
+        incorrect_side:
+          description: "When the incorrect side of a document has been uploaded, and\
+            \ we have not received the front."
+          type: string
+        cut_off_document:
+          description: When data points are not included in the image due to the document
+            being cut off.
+          type: string
+        no_document_in_image:
+          description: If no document has been uploaded or there is a blank image.
+          type: string
+        two_documents_uploaded:
+          description: When 2 different documents are submitted in the same check.
+          type: string
+      type: object
+    document_CDQ_reasons:
+      properties:
+        obscured_data_points:
+          description: When data points are obscured to the point that we cannot confirm
+            if the fonts match the expected ones.
+          type: string
+        obscured_security_features:
+          description: "When a critical security feature is obscured. This can also\
+            \ refer to when the holder's wet signature, necessary for the document\
+            \ to be valid, is not present."
+          type: string
+        abnormal_document_features:
+          description: "One of 3 reasons (1) OCR Assisted Scans (i.e. when you're\
+            \ able to move the mouse and highlight part of text), (2) Severely Washed\
+            \ out Background, (3) Overlapping Text."
+          type: string
+        watermarks_digital_text_overlay:
+          description: Any digital text or electronic watermarks on the document.
+          type: string
+        corner_removed:
+          description: If the corner has been physically cut off. This can be found
+            on some documents that are no longer valid.
+          type: string
+        punctured_document:
+          description: A punched hole is present.
+          type: string
+        missing_back:
+          description: "When the back of a document is needed for processing, but\
+            \ is not available."
+          type: string
+        digital_document:
+          description: "When a document has been published digitally, there aren’\
+            t enough security features to review so we cannot perform a full fraud\
+            \ assessment."
+          type: string
+      type: object
+    document_ODP_reasons:
+      properties:
+        photo_of_screen:
+          description: When the applicant's document is on a physical screen or device.
+          type: string
+        screenshot:
+          description: "When the applicant has used their mobile phone, tablet, or\
+            \ computer to take a photo within the device."
+          type: string
+        document_on_printed_paper:
+          description: "When the applicant has previously captured an image of the\
+            \ document, printed it out, and has now taken a photo of this print out\
+            \ to upload."
+          type: string
+        scan:
+          description: When the document has clearly been captured using a scanner
+            and there are visible indicators of this
+          type: string
       type: object
     ErrorProperties:
       properties:
@@ -1761,7 +2653,7 @@ components:
           $ref: '#/components/schemas/ErrorProperties'
       title: Error
       type: object
-    inline_object:
+    upload_document_request:
       properties:
         applicant_id:
           description: The ID of the applicant whose document is being uploaded.
@@ -1777,14 +2669,20 @@ components:
           description: Either the `front` or `back` of the document.
           type: string
         issuing_country:
-          description: The issuing country of the document, a 3-letter ISO code.
+          description: "The issuing country of the document, a 3-letter ISO code."
           type: string
+        validate_image_quality:
+          description: Defaults to false. When true the submitted image will undergo
+            an image quality validation which may take up to 5 seconds.
+          type: boolean
+        location:
+          $ref: '#/components/schemas/location'
       required:
       - applicant_id
       - file
       - type
       type: object
-    inline_object_1:
+    upload_live_photo_request:
       properties:
         applicant_id:
           type: string
@@ -1799,6 +2697,1287 @@ components:
       required:
       - applicant_id
       - file
+      type: object
+    create_workflow_run_request:
+      properties:
+        workflow_id:
+          description: The unique identifier for the Workflow.
+          type: string
+        applicant_id:
+          description: The unique identifier for the Applicant.
+          type: string
+        custom_data:
+          description: Optional object with custom input data to be used in the Workflow
+            Run.
+          type: object
+        tags:
+          description: Tags or labels to assign to the workflow run.
+          items:
+            maxLength: 128
+            minLength: 1
+            type: string
+          maxItems: 30
+          minItems: 1
+          type: array
+          uniqueItems: true
+        link:
+          description: Optional object for the configuration of the Workflow Run link.
+          type: object
+      required:
+      - applicant_id
+      - workflow_id
+      type: object
+    list_tasks_200_response_tasks_inner:
+      example:
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: id
+        task_def_id: task_def_id
+      properties:
+        id:
+          description: The identifier for the Task.
+          type: string
+        task_def_id:
+          description: The identifier for the Task Definition.
+          type: string
+        created_at:
+          description: The date and time when the Task was created.
+          format: date-time
+          type: string
+        updated_at:
+          description: The date and time when the Task was last updated.
+          format: date-time
+          type: string
+      type: object
+    list_tasks_200_response:
+      example:
+        tasks:
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          task_def_id: task_def_id
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          task_def_id: task_def_id
+      properties:
+        tasks:
+          items:
+            $ref: '#/components/schemas/list_tasks_200_response_tasks_inner'
+          type: array
+      type: object
+    complete_task_request:
+      properties:
+        data:
+          description: The Task completion payload.
+          type: object
+      type: object
+    workflow_run_error:
+      description: Error object. Only set when the Workflow Run status is 'error'.
+      example:
+        type: type
+        message: message
+      properties:
+        type:
+          description: The type of error.
+          type: string
+        message:
+          description: A textual description of the error.
+          type: string
+      type: object
+    workflow_run_link:
+      description: Object for the configuration of the Workflow Run link.
+      example:
+        expires_at: 2000-01-23T04:56:07.000+00:00
+        expired_redirect_url: expired_redirect_url
+        completed_redirect_url: completed_redirect_url
+        language: language
+        url: url
+      properties:
+        url:
+          description: Link to access the Workflow Run without the need to integrate
+            with Onfido's SDKs.
+          type: string
+        completed_redirect_url:
+          description: "When the interactive section of the Workflow Run has completed\
+            \ successfully, the user will be redirected to this URL instead of seeing\
+            \ the default Onfido 'thank you' page."
+          type: string
+        expired_redirect_url:
+          description: "When the link has expired, the user will be immediately redirected\
+            \ to this URL instead of seeing the default Onfido error message."
+          type: string
+        expires_at:
+          description: Date and time when the link will expire.
+          format: date-time
+          type: string
+        language:
+          description: The code for the language when the workflow run is acessed
+            using the link.
+          type: string
+      type: object
+    document_with_driver_verification_report_allOf_properties_allOf_vehicle_class_details_inner:
+      properties:
+        category:
+          description: Vehicle class/category
+          type: string
+        codes:
+          description: Special conditions driver must meet
+          type: string
+        obtainment_date:
+          description: Category obtainment date
+          format: date
+          type: string
+        expiry_date:
+          description: Category expiry date
+          format: date
+          type: string
+      type: object
+    document_with_driver_verification_report_allOf_properties:
+      allOf:
+      - $ref: '#/components/schemas/document_properties'
+      - properties:
+          drivers_licence:
+            description: True for **non-restricted** driving licences
+            type: boolean
+          restricted_licence:
+            description: "True for **limited/restricted** driving license, including\
+              \ learner's permits"
+            type: boolean
+          raw_licence_category:
+            description: "Underlying, non-normalised, licence category (e.g. \"Junior\
+              \ operators license\")"
+            type: string
+          raw_vehicle_classes:
+            description: Comma-separated vehicle classes that the user is qualified
+              for
+            type: string
+          vehicle_class_details:
+            description: Detailed classes/categories information
+            items:
+              $ref: '#/components/schemas/document_with_driver_verification_report_allOf_properties_allOf_vehicle_class_details_inner'
+            type: array
+        type: object
+    facial_similarity_photo_breakdown_face_comparison_breakdown_face_match_properties:
+      properties:
+        score:
+          description: "A floating point number between 0 and 1 that expresses how\
+            \ similar the two faces are, where 1 is a perfect match."
+          format: float
+          type: number
+        document_id:
+          description: The UUID for the document containing the extracted face that
+            was used for face matching.
+          format: uuid
+          type: string
+      type: object
+    facial_similarity_photo_breakdown_face_comparison_breakdown_face_match:
+      description: Contains a score value under the properties bag.
+      properties:
+        result:
+          type: string
+        properties:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_face_comparison_breakdown_face_match_properties'
+      type: object
+    facial_similarity_photo_breakdown_face_comparison_breakdown:
+      properties:
+        face_match:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_face_comparison_breakdown_face_match'
+      type: object
+    facial_similarity_photo_breakdown_face_comparison:
+      description: Asserts whether the face in the document matches the face in the
+        live photo.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_face_comparison_breakdown'
+      type: object
+    facial_similarity_photo_breakdown_image_integrity_breakdown_face_detected:
+      description: Asserts a single face of good enough quality has been found in
+        both the document image and the live photo.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    facial_similarity_photo_breakdown_image_integrity_breakdown_source_integrity:
+      description: "Asserts whether the live photo is trustworthy - i.e. not digitally\
+        \ tampered, from a fake webcam, or from other dubious sources."
+      properties:
+        result:
+          type: string
+        properties:
+          $ref: '#/components/schemas/photo_reasons'
+      type: object
+    facial_similarity_photo_breakdown_image_integrity_breakdown:
+      properties:
+        face_detected:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_image_integrity_breakdown_face_detected'
+        source_integrity:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_image_integrity_breakdown_source_integrity'
+      type: object
+    facial_similarity_photo_breakdown_image_integrity:
+      description: Asserts whether the quality and integrity of the uploaded files
+        were sufficient to perform a face comparison.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_image_integrity_breakdown'
+      type: object
+    facial_similarity_photo_breakdown_visual_authenticity_breakdown_spoofing_detection_properties:
+      properties:
+        score:
+          description: "A floating point number between 0 and 1. The closer the score\
+            \ is to 0, the more likely it is to be a spoof."
+          format: float
+          type: number
+      type: object
+    facial_similarity_photo_breakdown_visual_authenticity_breakdown_spoofing_detection:
+      description: Contains a score value under the properties bag.
+      properties:
+        result:
+          type: string
+        properties:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_visual_authenticity_breakdown_spoofing_detection_properties'
+      type: object
+    facial_similarity_photo_breakdown_visual_authenticity_breakdown:
+      properties:
+        spoofing_detection:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_visual_authenticity_breakdown_spoofing_detection'
+      type: object
+    facial_similarity_photo_breakdown_visual_authenticity:
+      description: Asserts whether the person in the live photo is real and not a
+        spoof.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_visual_authenticity_breakdown'
+      type: object
+    known_faces_breakdown_previously_seen_faces:
+      description: Asserts whether the applicant's most recent facial media (live
+        photo or live video) matches any other live photos or live videos already
+        in your Onfido account database.
+      properties:
+        result:
+          type: string
+      type: object
+    known_faces_breakdown_image_integrity:
+      description: Asserts whether the uploaded live photo or live video and the content
+        contained within it were of sufficient quality to perform a face comparison.
+      properties:
+        result:
+          type: string
+      type: object
+    known_faces_properties_matches_inner:
+      properties:
+        applicant_id:
+          description: The applicant ID of the matched applicant.
+          format: uuid
+          type: string
+        score:
+          description: "A floating point number between 0 and 1 that expresses how\
+            \ similar the two faces are, where 1 is a perfect match."
+          format: float
+          type: number
+        media_id:
+          description: The corresponding UUID for the media type.
+          format: uuid
+          type: string
+        media_type:
+          description: The media type (for example live_photos or live_videos).
+          type: string
+        suspected:
+          description: "Indicates if match is suspected based on fuzzy name matching\
+            \ feature. Dependent on feature being active for account, otherwise defaults\
+            \ to true."
+          type: boolean
+      type: object
+    photo_fully_auto_breakdown_image_integrity_breakdown_source_integrity:
+      description: "Asserts whether the live photo is trustworthy - i.e. not digitally\
+        \ tampered, from a fake webcam, or from other dubious sources."
+      properties:
+        result:
+          type: string
+        properties:
+          $ref: '#/components/schemas/photo_auto_reasons'
+      type: object
+    photo_fully_auto_breakdown_image_integrity_breakdown:
+      properties:
+        face_detected:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_image_integrity_breakdown_face_detected'
+        source_integrity:
+          $ref: '#/components/schemas/photo_fully_auto_breakdown_image_integrity_breakdown_source_integrity'
+      type: object
+    photo_fully_auto_breakdown_image_integrity:
+      description: Asserts whether the quality and integrity of the uploaded files
+        were sufficient to perform a face comparison.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/photo_fully_auto_breakdown_image_integrity_breakdown'
+      type: object
+    facial_similarity_video_breakdown_face_comparison:
+      description: Asserts whether the face in the document matches the face in the
+        live video.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_face_comparison_breakdown'
+      readOnly: true
+      type: object
+    facial_similarity_video_breakdown_image_integrity_breakdown_face_detected:
+      description: Asserts a single face of good enough quality has been found in
+        both the document image and the live video.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    facial_similarity_video_breakdown_image_integrity_breakdown_source_integrity:
+      description: Asserts whether the live video is trustworthy - e.g. not from a
+        fake webcam.
+      properties:
+        result:
+          type: string
+        properties:
+          $ref: '#/components/schemas/video_reasons'
+      type: object
+    facial_similarity_video_breakdown_image_integrity_breakdown:
+      properties:
+        face_detected:
+          $ref: '#/components/schemas/facial_similarity_video_breakdown_image_integrity_breakdown_face_detected'
+        source_integrity:
+          $ref: '#/components/schemas/facial_similarity_video_breakdown_image_integrity_breakdown_source_integrity'
+      type: object
+    facial_similarity_video_breakdown_image_integrity:
+      description: Asserts whether the quality and integrity of the uploaded files
+        were sufficient to perform a face comparison.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/facial_similarity_video_breakdown_image_integrity_breakdown'
+      readOnly: true
+      type: object
+    facial_similarity_video_breakdown_visual_authenticity_breakdown_liveness_detected:
+      description: Asserts whether the numbers and head movements were correctly executed.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    facial_similarity_video_breakdown_visual_authenticity_breakdown_spoofing_detection:
+      description: Asserts whether the live video is not a spoof (such as videos of
+        digital screens).
+      properties:
+        result:
+          type: string
+        properties:
+          $ref: '#/components/schemas/facial_similarity_photo_breakdown_visual_authenticity_breakdown_spoofing_detection_properties'
+      type: object
+    facial_similarity_video_breakdown_visual_authenticity_breakdown:
+      properties:
+        liveness_detected:
+          $ref: '#/components/schemas/facial_similarity_video_breakdown_visual_authenticity_breakdown_liveness_detected'
+        spoofing_detection:
+          $ref: '#/components/schemas/facial_similarity_video_breakdown_visual_authenticity_breakdown_spoofing_detection'
+      type: object
+    facial_similarity_video_breakdown_visual_authenticity:
+      description: Asserts whether the person in the live video is real (not a spoof)
+        and live.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/facial_similarity_video_breakdown_visual_authenticity_breakdown'
+      readOnly: true
+      type: object
+    document_breakdown_data_comparison_breakdown_issuing_country:
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_data_comparison_breakdown:
+      properties:
+        issuing_country:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        gender:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        date_of_expiry:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        last_name:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        document_type:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        document_numbers:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        first_name:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        date_of_birth:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+      type: object
+    document_breakdown_data_comparison:
+      description: Asserts whether data on the document is consistent with data provided
+        when creating an applicant through the API.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown'
+      type: object
+    document_breakdown_data_validation_breakdown_document_expiration:
+      description: "If this is flagged, the document has expired."
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_data_validation_breakdown_expiry_date:
+      description: "If this is flagged, the expiration date has the incorrect format."
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_data_validation_breakdown:
+      properties:
+        gender:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        date_of_birth:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        document_numbers:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        document_expiration:
+          $ref: '#/components/schemas/document_breakdown_data_validation_breakdown_document_expiration'
+        expiry_date:
+          $ref: '#/components/schemas/document_breakdown_data_validation_breakdown_expiry_date'
+        mrz:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        barcode:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+      type: object
+    document_breakdown_data_validation:
+      description: Asserts whether algorithmically validatable elements are correct.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/document_breakdown_data_validation_breakdown'
+      type: object
+    document_breakdown_image_integrity_breakdown_image_quality:
+      description: Asserts whether the quality of the image was sufficient for processing.
+      properties:
+        result:
+          type: string
+        properties:
+          $ref: '#/components/schemas/document_IQ_reasons'
+      type: object
+    document_breakdown_image_integrity_breakdown_supported_document:
+      description: Asserts whether the submitted document is supported.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_image_integrity_breakdown_colour_picture:
+      description: Asserts whether the image was a colour one.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_image_integrity_breakdown_conclusive_document_quality:
+      description: Asserts if the document was of enough quality to be able to perform
+        a fraud inspection.
+      properties:
+        result:
+          type: string
+        properties:
+          $ref: '#/components/schemas/document_CDQ_reasons'
+      type: object
+    document_breakdown_image_integrity_breakdown:
+      properties:
+        image_quality:
+          $ref: '#/components/schemas/document_breakdown_image_integrity_breakdown_image_quality'
+        supported_document:
+          $ref: '#/components/schemas/document_breakdown_image_integrity_breakdown_supported_document'
+        colour_picture:
+          $ref: '#/components/schemas/document_breakdown_image_integrity_breakdown_colour_picture'
+        conclusive_document_quality:
+          $ref: '#/components/schemas/document_breakdown_image_integrity_breakdown_conclusive_document_quality'
+      type: object
+    document_breakdown_image_integrity:
+      description: Asserts if the document is of sufficient quality to verify.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/document_breakdown_image_integrity_breakdown'
+      type: object
+    document_breakdown_visual_authenticity_breakdown_fonts:
+      description: Fonts in the document don’t match the expected ones.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_visual_authenticity_breakdown_picture_face_integrity:
+      description: The pictures of the person identified on the document show signs
+        of tampering or alteration.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_visual_authenticity_breakdown_template:
+      description: The document doesn’t match the expected template for the document
+        type and country it is from.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_visual_authenticity_breakdown_security_features:
+      description: Security features expected on the document are missing or wrong.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_visual_authenticity_breakdown_original_document_present:
+      description: The document was not present when the photo was taken.
+      properties:
+        result:
+          type: string
+        properties:
+          $ref: '#/components/schemas/document_ODP_reasons'
+      type: object
+    document_breakdown_visual_authenticity_breakdown_digital_tampering:
+      description: Indication of digital tampering in the image.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_visual_authenticity_breakdown_other:
+      description: "This sub-breakdown is returned for backward compatibility reasons.\
+        \ Its value will be consider when at least one of the other breakdowns is\
+        \ consider, and clear when all the other breakdowns are clear."
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_visual_authenticity_breakdown_face_detection:
+      description: No face was detected on the document.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_visual_authenticity_breakdown:
+      properties:
+        fonts:
+          $ref: '#/components/schemas/document_breakdown_visual_authenticity_breakdown_fonts'
+        picture_face_integrity:
+          $ref: '#/components/schemas/document_breakdown_visual_authenticity_breakdown_picture_face_integrity'
+        template:
+          $ref: '#/components/schemas/document_breakdown_visual_authenticity_breakdown_template'
+        security_features:
+          $ref: '#/components/schemas/document_breakdown_visual_authenticity_breakdown_security_features'
+        original_document_present:
+          $ref: '#/components/schemas/document_breakdown_visual_authenticity_breakdown_original_document_present'
+        digital_tampering:
+          $ref: '#/components/schemas/document_breakdown_visual_authenticity_breakdown_digital_tampering'
+        other:
+          $ref: '#/components/schemas/document_breakdown_visual_authenticity_breakdown_other'
+        face_detection:
+          $ref: '#/components/schemas/document_breakdown_visual_authenticity_breakdown_face_detection'
+      type: object
+    document_breakdown_visual_authenticity:
+      description: "Asserts whether visual, non-textual, elements are correct given\
+        \ the type of document."
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/document_breakdown_visual_authenticity_breakdown'
+      type: object
+    document_breakdown_data_consistency_breakdown:
+      properties:
+        date_of_expiry:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        document_numbers:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        issuing_country:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        document_type:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        date_of_birth:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        gender:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        first_name:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        nationality:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        last_name:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        multiple_data_sources_present:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+      type: object
+    document_breakdown_data_consistency:
+      description: Asserts whether data represented in multiple places on the document
+        is consistent.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/document_breakdown_data_consistency_breakdown'
+      type: object
+    document_breakdown_police_record:
+      description: "Asserts whether the document had been identified as lost, stolen\
+        \ or otherwise compromised."
+      properties:
+        result:
+          type: string
+      type: object
+    document_breakdown_compromised_document_breakdown:
+      properties:
+        document_database:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        repeat_attempts:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+      type: object
+    document_breakdown_compromised_document:
+      description: Asserts whether the image of the document has been found in our
+        internal database or if it was used in a suspicious way.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/document_breakdown_compromised_document_breakdown'
+      type: object
+    document_breakdown_age_validation_breakdown:
+      properties:
+        minimum_accepted_age:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+      type: object
+    document_breakdown_age_validation:
+      description: Asserts whether the age calculated from the document’s date of
+        birth data point is greater than or equal to the minimum accepted age.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/document_breakdown_age_validation_breakdown'
+      type: object
+    document_breakdown_issuing_authority_breakdown_nfc_active_authentication:
+      description: Asserts whether the document NFC chip is original or cloned.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_issuing_authority_breakdown_nfc_passive_authentication:
+      description: Asserts whether the document NFC chip data was tampered.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    document_breakdown_issuing_authority_breakdown:
+      properties:
+        nfc_active_authentication:
+          $ref: '#/components/schemas/document_breakdown_issuing_authority_breakdown_nfc_active_authentication'
+        nfc_passive_authentication:
+          $ref: '#/components/schemas/document_breakdown_issuing_authority_breakdown_nfc_passive_authentication'
+      type: object
+    document_breakdown_issuing_authority:
+      description: Asserts whether data on the document matches the issuing authority
+        data.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/document_breakdown_issuing_authority_breakdown'
+      type: object
+    document_properties_document_numbers_inner:
+      properties:
+        value:
+          type: string
+        type:
+          type: string
+      type: object
+    document_properties_address_lines:
+      properties:
+        street_address:
+          type: string
+        state:
+          type: string
+        postal_code:
+          type: string
+        country:
+          type: string
+        city:
+          type: string
+        country_code:
+          type: string
+      type: object
+    document_properties_barcode_inner:
+      properties:
+        first_name:
+          type: string
+        middle_name:
+          type: string
+        last_name:
+          type: string
+        document_type:
+          type: string
+        date_of_expiry:
+          format: date
+          type: string
+        date_of_birth:
+          format: date
+          type: string
+        issuing_date:
+          format: date
+          type: string
+        address_line_1:
+          type: string
+        address_line_2:
+          type: string
+        address_line_3:
+          type: string
+        address_line_4:
+          type: string
+        address_line_5:
+          type: string
+        issuing_state:
+          type: string
+        class:
+          type: string
+        gender:
+          type: string
+        issuing_country:
+          type: string
+        document_number:
+          type: string
+        real_id_classification:
+          type: string
+      type: object
+    document_properties_nfc:
+      properties:
+        document_type:
+          type: string
+        issuing_country:
+          type: string
+        full_name:
+          type: string
+        document_number:
+          type: string
+        nationality:
+          type: string
+        date_of_birth:
+          format: date
+          type: string
+        gender:
+          type: string
+        date_of_expiry:
+          format: date
+          type: string
+        personal_number:
+          type: string
+        place_of_birth:
+          type: string
+        address:
+          type: string
+        issuing_date:
+          format: date
+          type: string
+        issuing_authority:
+          type: string
+      type: object
+    document_properties_driving_licence_information:
+      properties:
+        category:
+          type: string
+        obtainment_date:
+          format: date
+          type: string
+        expiry_date:
+          format: date
+          type: string
+        codes:
+          type: string
+      type: object
+    document_properties_document_classification:
+      properties:
+        issuing_country:
+          type: string
+        document_type:
+          type: string
+        issuing_state:
+          type: string
+      type: object
+    document_properties_extracted_data:
+      properties:
+        document_number:
+          type: string
+        date_of_birth:
+          format: date
+          type: string
+        date_of_expiry:
+          format: date
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        middle_name:
+          type: string
+        full_name:
+          type: string
+        spouse_name:
+          type: string
+        widow_name:
+          type: string
+        alias_name:
+          type: string
+        gender:
+          type: string
+        mrz_line1:
+          type: string
+        mrz_line2:
+          type: string
+        mrz_line3:
+          type: string
+        nationality:
+          type: string
+        address_line_1:
+          type: string
+        address_line_2:
+          type: string
+        address_line_3:
+          type: string
+        address_line_4:
+          type: string
+        address_line_5:
+          type: string
+        issuing_authority:
+          type: string
+      type: object
+    proof_of_address_breakdown_data_comparison_breakdown:
+      properties:
+        address:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        first_name:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        last_name:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+      type: object
+    proof_of_address_breakdown_data_comparison:
+      description: "Asserts whether the first name, last name and address provided\
+        \ by the applicant match those on the PoA document."
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/proof_of_address_breakdown_data_comparison_breakdown'
+      type: object
+    proof_of_address_breakdown_document_classification_breakdown:
+      properties:
+        supported_document:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+      type: object
+    proof_of_address_breakdown_document_classification:
+      description: Asserts whether the document is of a valid type as PoA.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/proof_of_address_breakdown_document_classification_breakdown'
+      type: object
+    proof_of_address_breakdown_image_integrity_breakdown:
+      properties:
+        image_quality:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+      type: object
+    proof_of_address_breakdown_image_integrity:
+      description: Asserts whether the quality of the uploaded document was sufficient
+        to verify the address.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/proof_of_address_breakdown_image_integrity_breakdown'
+      type: object
+    watchlist_enhanced_breakdown_politically_exposed_person:
+      description: "Asserts if there are any records found in the proprietary database\
+        \ of Politically Exposed Persons sourced from government lists, websites and\
+        \ other media sources."
+      properties:
+        result:
+          type: string
+      type: object
+    watchlist_enhanced_breakdown_sanction:
+      description: Asserts if there are any records found in Government and International
+        Organisations Sanctions Lists.
+      properties:
+        result:
+          type: string
+      type: object
+    watchlist_enhanced_breakdown_adverse_media:
+      description: Asserts if there are any records found of negative events reported
+        by publicly and generally available media sources.
+      properties:
+        result:
+          type: string
+      type: object
+    watchlist_enhanced_breakdown_monitored_lists:
+      description: "Asserts if there are any records found in Law-Enforcement and\
+        \ Regulatory bodies Monitored Lists (including Terrorism, Money Laundering\
+        \ and Most Wanted lists)."
+      properties:
+        result:
+          type: string
+      type: object
+    right_to_work_breakdown_right_to_work_breakdown_applicant_has_the_right_to_work:
+      description: "Asserts whether the applicant has the right to work, has restricted\
+        \ right to work or no right to work."
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    right_to_work_breakdown_right_to_work_breakdown:
+      properties:
+        applicant_has_the_right_to_work:
+          $ref: '#/components/schemas/right_to_work_breakdown_right_to_work_breakdown_applicant_has_the_right_to_work'
+      type: object
+    right_to_work_breakdown_right_to_work:
+      description: Asserts whether the applicant has the right to work.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/right_to_work_breakdown_right_to_work_breakdown'
+      type: object
+    right_to_work_breakdown_data_validation_breakdown_document_numbers_properties:
+      properties:
+        document_number:
+          description: Flags if the document number is not the expected length and
+            format for document.
+          type: string
+      type: object
+    right_to_work_breakdown_data_validation_breakdown_document_numbers:
+      properties:
+        result:
+          type: string
+        properties:
+          $ref: '#/components/schemas/right_to_work_breakdown_data_validation_breakdown_document_numbers_properties'
+      type: object
+    right_to_work_breakdown_data_validation_breakdown:
+      properties:
+        gender:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        date_of_birth:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        document_numbers:
+          $ref: '#/components/schemas/right_to_work_breakdown_data_validation_breakdown_document_numbers'
+        document_expiration:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        expiry_date:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        mrz:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+      type: object
+    right_to_work_breakdown_data_validation:
+      description: Asserts whether algorithmically validatable elements are correct.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/right_to_work_breakdown_data_validation_breakdown'
+      type: object
+    right_to_work_breakdown_image_integrity_breakdown:
+      properties:
+        image_quality:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        supported_document:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        colour_picture:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        conclusive_document_quality:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+      type: object
+    right_to_work_breakdown_image_integrity:
+      description: Asserts if the document is of sufficient quality to verify.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/right_to_work_breakdown_image_integrity_breakdown'
+      type: object
+    right_to_work_breakdown_visual_authenticity_breakdown:
+      properties:
+        fonts:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        picture_face_integrity:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        template:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        security_features:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        original_document_present:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        digital_tampering:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        other:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        face_detection:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+      type: object
+    right_to_work_breakdown_visual_authenticity:
+      description: "Asserts whether visual, non-textual, elements are correct given\
+        \ the type of document."
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/right_to_work_breakdown_visual_authenticity_breakdown'
+      type: object
+    right_to_work_breakdown_data_consistency_breakdown:
+      properties:
+        date_of_expiry:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        document_numbers:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        issuing_country:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        document_type:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        date_of_birth:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        gender:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        first_name:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        nationality:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+        last_name:
+          $ref: '#/components/schemas/document_breakdown_data_comparison_breakdown_issuing_country'
+      type: object
+    right_to_work_breakdown_data_consistency:
+      description: Asserts whether data represented in multiple places on the document
+        is consistent.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/right_to_work_breakdown_data_consistency_breakdown'
+      type: object
+    right_to_work_breakdown_age_validation:
+      description: Asserts whether the age calculated from the document’s date of
+        birth data point is greater than or equal to the minimum accepted age.
+      properties:
+        result:
+          type: string
+      type: object
+    right_to_work_breakdown_share_code_validation_breakdown_document_id_properties:
+      properties:
+        document_id:
+          description: The document ID to retrieve the GOV.UK evidence document of
+            the applicant's right to work.
+          type: string
+      type: object
+    right_to_work_breakdown_share_code_validation_breakdown_document_id:
+      description: Contains the document ID number in the properties bag.
+      properties:
+        result:
+          type: string
+        properties:
+          $ref: '#/components/schemas/right_to_work_breakdown_share_code_validation_breakdown_document_id_properties'
+      type: object
+    right_to_work_breakdown_share_code_validation_breakdown_applicant_has_valid_share_code:
+      description: Asserts whether the provided share code is valid.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    right_to_work_breakdown_share_code_validation_breakdown_name_matched:
+      description: Asserts whether the applicant's given name matches the name on
+        the share code results document.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    right_to_work_breakdown_share_code_validation_breakdown:
+      properties:
+        document_id:
+          $ref: '#/components/schemas/right_to_work_breakdown_share_code_validation_breakdown_document_id'
+        applicant_has_valid_share_code:
+          $ref: '#/components/schemas/right_to_work_breakdown_share_code_validation_breakdown_applicant_has_valid_share_code'
+        name_matched:
+          $ref: '#/components/schemas/right_to_work_breakdown_share_code_validation_breakdown_name_matched'
+      type: object
+    right_to_work_breakdown_share_code_validation:
+      description: Asserts whether the applicant has a valid right to work share code.
+        Only returned when a share code is provided.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/right_to_work_breakdown_share_code_validation_breakdown'
+      type: object
+    identity_enhanced_breakdown_sources_breakdown_total_sources_properties:
+      properties:
+        total_number_of_sources:
+          type: integer
+      type: object
+    identity_enhanced_breakdown_sources_breakdown_total_sources:
+      description: The number of sources which produced a match to applicant details.
+      properties:
+        result:
+          type: string
+        properties:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_sources_breakdown_total_sources_properties'
+      type: object
+    identity_enhanced_breakdown_sources_breakdown:
+      properties:
+        total_sources:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_sources_breakdown_total_sources'
+      type: object
+    identity_enhanced_breakdown_sources:
+      description: Asserts if any sources that an applicant's details have been verified
+        against have produced a match.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_sources_breakdown'
+      type: object
+    identity_enhanced_breakdown_address_breakdown_credit_agencies_properties:
+      properties:
+        number_of_matches:
+          type: integer
+      type: object
+    identity_enhanced_breakdown_address_breakdown_credit_agencies:
+      description: The number of address matches against credit agencies.
+      properties:
+        result:
+          type: string
+        properties:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_address_breakdown_credit_agencies_properties'
+      type: object
+    identity_enhanced_breakdown_address_breakdown_telephone_database:
+      description: Address match against telephone database.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    identity_enhanced_breakdown_address_breakdown_voting_register:
+      description: Address match against voting register.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    identity_enhanced_breakdown_address_breakdown:
+      properties:
+        credit_agencies:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_address_breakdown_credit_agencies'
+        telephone_database:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_address_breakdown_telephone_database'
+        voting_register:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_address_breakdown_voting_register'
+      type: object
+    identity_enhanced_breakdown_address:
+      description: Asserts if the applicant's address matches any sources.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_address_breakdown'
+      type: object
+    identity_enhanced_breakdown_date_of_birth_breakdown_credit_agencies:
+      description: Date of birth match against credit agencies.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    identity_enhanced_breakdown_date_of_birth_breakdown_voting_register:
+      description: Date of birth match against voting register.
+      properties:
+        result:
+          type: string
+        properties:
+          type: object
+      type: object
+    identity_enhanced_breakdown_date_of_birth_breakdown:
+      properties:
+        credit_agencies:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_date_of_birth_breakdown_credit_agencies'
+        voting_register:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_date_of_birth_breakdown_voting_register'
+      type: object
+    identity_enhanced_breakdown_date_of_birth:
+      description: Asserts if the applicant's date of birth matches any sources.
+      properties:
+        result:
+          type: string
+        breakdown:
+          $ref: '#/components/schemas/identity_enhanced_breakdown_date_of_birth_breakdown'
+      type: object
+    identity_enhanced_breakdown_mortality:
+      description: Asserts if the applicant's details match any death records.
+      properties:
+        result:
+          type: string
+      type: object
+    identity_enhanced_properties_matched_addresses_inner:
+      properties:
+        id:
+          description: The address number.
+          type: number
+        match_types:
+          description: Sources which contain matched addresses.
+          items:
+            type: string
+          type: array
       type: object
   securitySchemes:
     Token:

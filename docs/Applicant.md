@@ -15,6 +15,9 @@ Name | Type | Description | Notes
 **Dob** | Pointer to **string** | The applicant’s date of birth | [optional] 
 **Address** | Pointer to [**Address**](Address.md) |  | [optional] 
 **IdNumbers** | Pointer to [**[]IdNumber**](IdNumber.md) |  | [optional] 
+**PhoneNumber** | Pointer to **string** | The applicant’s phone number | [optional] 
+**Consents** | Pointer to **[]map[string]interface{}** |  | [optional] 
+**Location** | Pointer to [**Location**](Location.md) |  | [optional] 
 
 ## Methods
 
@@ -309,6 +312,81 @@ SetIdNumbers sets IdNumbers field to given value.
 `func (o *Applicant) HasIdNumbers() bool`
 
 HasIdNumbers returns a boolean if a field has been set.
+
+### GetPhoneNumber
+
+`func (o *Applicant) GetPhoneNumber() string`
+
+GetPhoneNumber returns the PhoneNumber field if non-nil, zero value otherwise.
+
+### GetPhoneNumberOk
+
+`func (o *Applicant) GetPhoneNumberOk() (*string, bool)`
+
+GetPhoneNumberOk returns a tuple with the PhoneNumber field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPhoneNumber
+
+`func (o *Applicant) SetPhoneNumber(v string)`
+
+SetPhoneNumber sets PhoneNumber field to given value.
+
+### HasPhoneNumber
+
+`func (o *Applicant) HasPhoneNumber() bool`
+
+HasPhoneNumber returns a boolean if a field has been set.
+
+### GetConsents
+
+`func (o *Applicant) GetConsents() []map[string]interface{}`
+
+GetConsents returns the Consents field if non-nil, zero value otherwise.
+
+### GetConsentsOk
+
+`func (o *Applicant) GetConsentsOk() (*[]map[string]interface{}, bool)`
+
+GetConsentsOk returns a tuple with the Consents field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetConsents
+
+`func (o *Applicant) SetConsents(v []map[string]interface{})`
+
+SetConsents sets Consents field to given value.
+
+### HasConsents
+
+`func (o *Applicant) HasConsents() bool`
+
+HasConsents returns a boolean if a field has been set.
+
+### GetLocation
+
+`func (o *Applicant) GetLocation() Location`
+
+GetLocation returns the Location field if non-nil, zero value otherwise.
+
+### GetLocationOk
+
+`func (o *Applicant) GetLocationOk() (*Location, bool)`
+
+GetLocationOk returns a tuple with the Location field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLocation
+
+`func (o *Applicant) SetLocation(v Location)`
+
+SetLocation sets Location field to given value.
+
+### HasLocation
+
+`func (o *Applicant) HasLocation() bool`
+
+HasLocation returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
