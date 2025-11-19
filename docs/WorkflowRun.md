@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **Error** | Pointer to [**WorkflowRunError**](WorkflowRunError.md) |  | [optional] 
 **Tags** | Pointer to **[]string** | Tags or labels assigned to the workflow run. | [optional] 
 **Link** | Pointer to [**WorkflowRunLink**](WorkflowRunLink.md) |  | [optional] 
+**SdkToken** | Pointer to **string** | Client token to use when loading this workflow run in the Onfido SDK. | [optional] 
 **CreatedAt** | Pointer to **time.Time** | The date and time when the Workflow Run was created. | [optional] 
 **UpdatedAt** | Pointer to **time.Time** | The date and time when the Workflow Run was last updated. | [optional] 
 
@@ -311,6 +312,31 @@ SetLink sets Link field to given value.
 `func (o *WorkflowRun) HasLink() bool`
 
 HasLink returns a boolean if a field has been set.
+
+### GetSdkToken
+
+`func (o *WorkflowRun) GetSdkToken() string`
+
+GetSdkToken returns the SdkToken field if non-nil, zero value otherwise.
+
+### GetSdkTokenOk
+
+`func (o *WorkflowRun) GetSdkTokenOk() (*string, bool)`
+
+GetSdkTokenOk returns a tuple with the SdkToken field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSdkToken
+
+`func (o *WorkflowRun) SetSdkToken(v string)`
+
+SetSdkToken sets SdkToken field to given value.
+
+### HasSdkToken
+
+`func (o *WorkflowRun) HasSdkToken() bool`
+
+HasSdkToken returns a boolean if a field has been set.
 
 ### GetCreatedAt
 

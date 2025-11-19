@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ReadOnly** | Pointer to **map[string]interface{}** |  | [optional] 
+**ReadOnly** | Pointer to **interface{}** |  | [optional] 
 **Id** | Pointer to **string** | The unique identifier for the report. Read-only. | [optional] [readonly] 
 **CreatedAt** | Pointer to **time.Time** | The date and time at which the report was first initiated. Read-only. | [optional] [readonly] 
 **Href** | Pointer to **string** | The API endpoint to retrieve the report. Read-only. | [optional] [readonly] 
@@ -38,20 +38,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetReadOnly
 
-`func (o *FacialSimilarityVideoReport) GetReadOnly() map[string]interface{}`
+`func (o *FacialSimilarityVideoReport) GetReadOnly() interface{}`
 
 GetReadOnly returns the ReadOnly field if non-nil, zero value otherwise.
 
 ### GetReadOnlyOk
 
-`func (o *FacialSimilarityVideoReport) GetReadOnlyOk() (*map[string]interface{}, bool)`
+`func (o *FacialSimilarityVideoReport) GetReadOnlyOk() (*interface{}, bool)`
 
 GetReadOnlyOk returns a tuple with the ReadOnly field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetReadOnly
 
-`func (o *FacialSimilarityVideoReport) SetReadOnly(v map[string]interface{})`
+`func (o *FacialSimilarityVideoReport) SetReadOnly(v interface{})`
 
 SetReadOnly sets ReadOnly field to given value.
 
@@ -61,6 +61,16 @@ SetReadOnly sets ReadOnly field to given value.
 
 HasReadOnly returns a boolean if a field has been set.
 
+### SetReadOnlyNil
+
+`func (o *FacialSimilarityVideoReport) SetReadOnlyNil(b bool)`
+
+ SetReadOnlyNil sets the value for ReadOnly to be an explicit nil
+
+### UnsetReadOnly
+`func (o *FacialSimilarityVideoReport) UnsetReadOnly()`
+
+UnsetReadOnly ensures that no value is present for ReadOnly, not even an explicit nil
 ### GetId
 
 `func (o *FacialSimilarityVideoReport) GetId() string`

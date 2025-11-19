@@ -23,7 +23,7 @@ var _ MappedNullable = &WatchlistStandardReport{}
 
 // WatchlistStandardReport struct for WatchlistStandardReport
 type WatchlistStandardReport struct {
-	ReadOnly map[string]interface{} `json:"readOnly,omitempty"`
+	ReadOnly interface{} `json:"readOnly,omitempty"`
 	// The unique identifier for the report. Read-only.
 	Id *string `json:"id,omitempty"`
 	// The date and time at which the report was first initiated. Read-only.
@@ -66,10 +66,10 @@ func NewWatchlistStandardReportWithDefaults() *WatchlistStandardReport {
 	return &this
 }
 
-// GetReadOnly returns the ReadOnly field value if set, zero value otherwise.
-func (o *WatchlistStandardReport) GetReadOnly() map[string]interface{} {
-	if o == nil || IsNil(o.ReadOnly) {
-		var ret map[string]interface{}
+// GetReadOnly returns the ReadOnly field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *WatchlistStandardReport) GetReadOnly() interface{} {
+	if o == nil {
+		var ret interface{}
 		return ret
 	}
 	return o.ReadOnly
@@ -77,11 +77,12 @@ func (o *WatchlistStandardReport) GetReadOnly() map[string]interface{} {
 
 // GetReadOnlyOk returns a tuple with the ReadOnly field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *WatchlistStandardReport) GetReadOnlyOk() (map[string]interface{}, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *WatchlistStandardReport) GetReadOnlyOk() (*interface{}, bool) {
 	if o == nil || IsNil(o.ReadOnly) {
-		return map[string]interface{}{}, false
+		return nil, false
 	}
-	return o.ReadOnly, true
+	return &o.ReadOnly, true
 }
 
 // HasReadOnly returns a boolean if a field has been set.
@@ -93,8 +94,8 @@ func (o *WatchlistStandardReport) HasReadOnly() bool {
 	return false
 }
 
-// SetReadOnly gets a reference to the given map[string]interface{} and assigns it to the ReadOnly field.
-func (o *WatchlistStandardReport) SetReadOnly(v map[string]interface{}) {
+// SetReadOnly gets a reference to the given interface{} and assigns it to the ReadOnly field.
+func (o *WatchlistStandardReport) SetReadOnly(v interface{}) {
 	o.ReadOnly = v
 }
 
@@ -452,7 +453,7 @@ func (o WatchlistStandardReport) MarshalJSON() ([]byte, error) {
 
 func (o WatchlistStandardReport) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.ReadOnly) {
+	if o.ReadOnly != nil {
 		toSerialize["readOnly"] = o.ReadOnly
 	}
 	if !IsNil(o.Id) {

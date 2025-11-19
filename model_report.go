@@ -14,6 +14,7 @@ package onfido_openapi
 import (
 	"encoding/json"
 	"fmt"
+	"gopkg.in/validator.v2"
 )
 
 // Report - struct for Report
@@ -151,7 +152,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonDocumentReport) == "{}" { // empty struct
 			dst.DocumentReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.DocumentReport); err != nil {
+				dst.DocumentReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.DocumentReport = nil
@@ -164,7 +169,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonDocumentWithAddressInformationReport) == "{}" { // empty struct
 			dst.DocumentWithAddressInformationReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.DocumentWithAddressInformationReport); err != nil {
+				dst.DocumentWithAddressInformationReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.DocumentWithAddressInformationReport = nil
@@ -177,7 +186,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonDocumentWithDriverVerificationReport) == "{}" { // empty struct
 			dst.DocumentWithDriverVerificationReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.DocumentWithDriverVerificationReport); err != nil {
+				dst.DocumentWithDriverVerificationReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.DocumentWithDriverVerificationReport = nil
@@ -190,7 +203,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonDocumentWithDrivingLicenceInformationReport) == "{}" { // empty struct
 			dst.DocumentWithDrivingLicenceInformationReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.DocumentWithDrivingLicenceInformationReport); err != nil {
+				dst.DocumentWithDrivingLicenceInformationReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.DocumentWithDrivingLicenceInformationReport = nil
@@ -203,7 +220,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonFacialSimilarityPhotoReport) == "{}" { // empty struct
 			dst.FacialSimilarityPhotoReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.FacialSimilarityPhotoReport); err != nil {
+				dst.FacialSimilarityPhotoReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.FacialSimilarityPhotoReport = nil
@@ -216,7 +237,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonFacialSimilarityVideoReport) == "{}" { // empty struct
 			dst.FacialSimilarityVideoReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.FacialSimilarityVideoReport); err != nil {
+				dst.FacialSimilarityVideoReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.FacialSimilarityVideoReport = nil
@@ -229,7 +254,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonIdentityEnhancedReport) == "{}" { // empty struct
 			dst.IdentityEnhancedReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.IdentityEnhancedReport); err != nil {
+				dst.IdentityEnhancedReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.IdentityEnhancedReport = nil
@@ -242,7 +271,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonKnownFacesReport) == "{}" { // empty struct
 			dst.KnownFacesReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.KnownFacesReport); err != nil {
+				dst.KnownFacesReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.KnownFacesReport = nil
@@ -255,7 +288,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonPhotoFullyAutoReport) == "{}" { // empty struct
 			dst.PhotoFullyAutoReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.PhotoFullyAutoReport); err != nil {
+				dst.PhotoFullyAutoReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.PhotoFullyAutoReport = nil
@@ -268,7 +305,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonProofOfAddressReport) == "{}" { // empty struct
 			dst.ProofOfAddressReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.ProofOfAddressReport); err != nil {
+				dst.ProofOfAddressReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.ProofOfAddressReport = nil
@@ -281,7 +322,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonRightToWorkReport) == "{}" { // empty struct
 			dst.RightToWorkReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.RightToWorkReport); err != nil {
+				dst.RightToWorkReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.RightToWorkReport = nil
@@ -294,7 +339,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonWatchlistEnhancedReport) == "{}" { // empty struct
 			dst.WatchlistEnhancedReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.WatchlistEnhancedReport); err != nil {
+				dst.WatchlistEnhancedReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.WatchlistEnhancedReport = nil
@@ -307,7 +356,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonWatchlistPepsOnlyReport) == "{}" { // empty struct
 			dst.WatchlistPepsOnlyReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.WatchlistPepsOnlyReport); err != nil {
+				dst.WatchlistPepsOnlyReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.WatchlistPepsOnlyReport = nil
@@ -320,7 +373,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonWatchlistSanctionsOnlyReport) == "{}" { // empty struct
 			dst.WatchlistSanctionsOnlyReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.WatchlistSanctionsOnlyReport); err != nil {
+				dst.WatchlistSanctionsOnlyReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.WatchlistSanctionsOnlyReport = nil
@@ -333,7 +390,11 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 		if string(jsonWatchlistStandardReport) == "{}" { // empty struct
 			dst.WatchlistStandardReport = nil
 		} else {
-			match++
+			if err = validator.Validate(dst.WatchlistStandardReport); err != nil {
+				dst.WatchlistStandardReport = nil
+			} else {
+				match++
+			}
 		}
 	} else {
 		dst.WatchlistStandardReport = nil
@@ -493,6 +554,72 @@ func (obj *Report) GetActualInstance() interface{} {
 
 	if obj.WatchlistStandardReport != nil {
 		return obj.WatchlistStandardReport
+	}
+
+	// all schemas are nil
+	return nil
+}
+
+// Get the actual instance value
+func (obj Report) GetActualInstanceValue() interface{} {
+	if obj.DocumentReport != nil {
+		return *obj.DocumentReport
+	}
+
+	if obj.DocumentWithAddressInformationReport != nil {
+		return *obj.DocumentWithAddressInformationReport
+	}
+
+	if obj.DocumentWithDriverVerificationReport != nil {
+		return *obj.DocumentWithDriverVerificationReport
+	}
+
+	if obj.DocumentWithDrivingLicenceInformationReport != nil {
+		return *obj.DocumentWithDrivingLicenceInformationReport
+	}
+
+	if obj.FacialSimilarityPhotoReport != nil {
+		return *obj.FacialSimilarityPhotoReport
+	}
+
+	if obj.FacialSimilarityVideoReport != nil {
+		return *obj.FacialSimilarityVideoReport
+	}
+
+	if obj.IdentityEnhancedReport != nil {
+		return *obj.IdentityEnhancedReport
+	}
+
+	if obj.KnownFacesReport != nil {
+		return *obj.KnownFacesReport
+	}
+
+	if obj.PhotoFullyAutoReport != nil {
+		return *obj.PhotoFullyAutoReport
+	}
+
+	if obj.ProofOfAddressReport != nil {
+		return *obj.ProofOfAddressReport
+	}
+
+	if obj.RightToWorkReport != nil {
+		return *obj.RightToWorkReport
+	}
+
+	if obj.WatchlistEnhancedReport != nil {
+		return *obj.WatchlistEnhancedReport
+	}
+
+	if obj.WatchlistPepsOnlyReport != nil {
+		return *obj.WatchlistPepsOnlyReport
+	}
+
+	if obj.WatchlistSanctionsOnlyReport != nil {
+		return *obj.WatchlistSanctionsOnlyReport
+	}
+
+	if obj.WatchlistStandardReport != nil {
+		return *obj.WatchlistStandardReport
 	}
 
 	// all schemas are nil

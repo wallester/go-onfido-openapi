@@ -23,7 +23,7 @@ var _ MappedNullable = &DocumentWithAddressInformationReport{}
 
 // DocumentWithAddressInformationReport struct for DocumentWithAddressInformationReport
 type DocumentWithAddressInformationReport struct {
-	ReadOnly map[string]interface{} `json:"readOnly,omitempty"`
+	ReadOnly interface{} `json:"readOnly,omitempty"`
 	// The unique identifier for the report. Read-only.
 	Id *string `json:"id,omitempty"`
 	// The date and time at which the report was first initiated. Read-only.
@@ -66,10 +66,10 @@ func NewDocumentWithAddressInformationReportWithDefaults() *DocumentWithAddressI
 	return &this
 }
 
-// GetReadOnly returns the ReadOnly field value if set, zero value otherwise.
-func (o *DocumentWithAddressInformationReport) GetReadOnly() map[string]interface{} {
-	if o == nil || IsNil(o.ReadOnly) {
-		var ret map[string]interface{}
+// GetReadOnly returns the ReadOnly field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *DocumentWithAddressInformationReport) GetReadOnly() interface{} {
+	if o == nil {
+		var ret interface{}
 		return ret
 	}
 	return o.ReadOnly
@@ -77,11 +77,12 @@ func (o *DocumentWithAddressInformationReport) GetReadOnly() map[string]interfac
 
 // GetReadOnlyOk returns a tuple with the ReadOnly field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DocumentWithAddressInformationReport) GetReadOnlyOk() (map[string]interface{}, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *DocumentWithAddressInformationReport) GetReadOnlyOk() (*interface{}, bool) {
 	if o == nil || IsNil(o.ReadOnly) {
-		return map[string]interface{}{}, false
+		return nil, false
 	}
-	return o.ReadOnly, true
+	return &o.ReadOnly, true
 }
 
 // HasReadOnly returns a boolean if a field has been set.
@@ -93,8 +94,8 @@ func (o *DocumentWithAddressInformationReport) HasReadOnly() bool {
 	return false
 }
 
-// SetReadOnly gets a reference to the given map[string]interface{} and assigns it to the ReadOnly field.
-func (o *DocumentWithAddressInformationReport) SetReadOnly(v map[string]interface{}) {
+// SetReadOnly gets a reference to the given interface{} and assigns it to the ReadOnly field.
+func (o *DocumentWithAddressInformationReport) SetReadOnly(v interface{}) {
 	o.ReadOnly = v
 }
 
@@ -452,7 +453,7 @@ func (o DocumentWithAddressInformationReport) MarshalJSON() ([]byte, error) {
 
 func (o DocumentWithAddressInformationReport) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.ReadOnly) {
+	if o.ReadOnly != nil {
 		toSerialize["readOnly"] = o.ReadOnly
 	}
 	if !IsNil(o.Id) {

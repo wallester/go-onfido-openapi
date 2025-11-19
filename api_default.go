@@ -1814,7 +1814,7 @@ func (a *DefaultAPIService) FindAddressesExecute(r ApiFindAddressesRequest) (*Ad
 		return localVarReturnValue, nil, reportError("postcode is required and must be specified")
 	}
 
-	parameterAddToHeaderOrQuery(localVarQueryParams, "postcode", r.postcode, "")
+	parameterAddToHeaderOrQuery(localVarQueryParams, "postcode", r.postcode, "", "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -2956,21 +2956,24 @@ func (a *DefaultAPIService) ListApplicantsExecute(r ApiListApplicantsRequest) (*
 	localVarFormParams := url.Values{}
 
 	if r.page != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "", "")
 	} else {
 		var defaultValue int32 = 1
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "", "")
 		r.page = &defaultValue
 	}
 	if r.perPage != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "per_page", r.perPage, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "per_page", r.perPage, "", "")
 	} else {
 		var defaultValue int32 = 20
+		parameterAddToHeaderOrQuery(localVarQueryParams, "per_page", defaultValue, "", "")
 		r.perPage = &defaultValue
 	}
 	if r.includeDeleted != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "include_deleted", r.includeDeleted, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "include_deleted", r.includeDeleted, "", "")
 	} else {
 		var defaultValue bool = false
+		parameterAddToHeaderOrQuery(localVarQueryParams, "include_deleted", defaultValue, "", "")
 		r.includeDeleted = &defaultValue
 	}
 	// to determine the Content-Type header
@@ -3102,7 +3105,7 @@ func (a *DefaultAPIService) ListChecksExecute(r ApiListChecksRequest) (*ChecksLi
 		return localVarReturnValue, nil, reportError("applicantId is required and must be specified")
 	}
 
-	parameterAddToHeaderOrQuery(localVarQueryParams, "applicant_id", r.applicantId, "")
+	parameterAddToHeaderOrQuery(localVarQueryParams, "applicant_id", r.applicantId, "", "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -3234,7 +3237,7 @@ func (a *DefaultAPIService) ListDocumentsExecute(r ApiListDocumentsRequest) (*Do
 		return localVarReturnValue, nil, reportError("applicantId is required and must be specified")
 	}
 
-	parameterAddToHeaderOrQuery(localVarQueryParams, "applicant_id", r.applicantId, "")
+	parameterAddToHeaderOrQuery(localVarQueryParams, "applicant_id", r.applicantId, "", "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -3365,7 +3368,7 @@ func (a *DefaultAPIService) ListLivePhotosExecute(r ApiListLivePhotosRequest) (*
 		return localVarReturnValue, nil, reportError("applicantId is required and must be specified")
 	}
 
-	parameterAddToHeaderOrQuery(localVarQueryParams, "applicant_id", r.applicantId, "")
+	parameterAddToHeaderOrQuery(localVarQueryParams, "applicant_id", r.applicantId, "", "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -3496,7 +3499,7 @@ func (a *DefaultAPIService) ListLiveVideosExecute(r ApiListLiveVideosRequest) (*
 		return localVarReturnValue, nil, reportError("applicantId is required and must be specified")
 	}
 
-	parameterAddToHeaderOrQuery(localVarQueryParams, "applicant_id", r.applicantId, "")
+	parameterAddToHeaderOrQuery(localVarQueryParams, "applicant_id", r.applicantId, "", "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -3626,7 +3629,7 @@ func (a *DefaultAPIService) ListReportsExecute(r ApiListReportsRequest) (*Report
 		return localVarReturnValue, nil, reportError("checkId is required and must be specified")
 	}
 
-	parameterAddToHeaderOrQuery(localVarQueryParams, "check_id", r.checkId, "")
+	parameterAddToHeaderOrQuery(localVarQueryParams, "check_id", r.checkId, "", "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -4027,24 +4030,26 @@ func (a *DefaultAPIService) ListWorkflowRunsExecute(r ApiListWorkflowRunsRequest
 	localVarFormParams := url.Values{}
 
 	if r.page != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "", "")
 	} else {
 		var defaultValue int32 = 1
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "", "")
 		r.page = &defaultValue
 	}
 	if r.status != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "status", r.status, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "status", r.status, "", "")
 	}
 	if r.createdAtGt != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "created_at_gt", r.createdAtGt, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "created_at_gt", r.createdAtGt, "", "")
 	}
 	if r.createdAtLt != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "created_at_lt", r.createdAtLt, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "created_at_lt", r.createdAtLt, "", "")
 	}
 	if r.sort != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "", "")
 	} else {
 		var defaultValue string = "desc"
+		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", defaultValue, "", "")
 		r.sort = &defaultValue
 	}
 	// to determine the Content-Type header
@@ -5089,8 +5094,8 @@ func (a *DefaultAPIService) UploadDocumentExecute(r ApiUploadDocumentRequest) (*
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	parameterAddToHeaderOrQuery(localVarFormParams, "applicant_id", r.applicantId, "")
-	parameterAddToHeaderOrQuery(localVarFormParams, "type", r.type_, "")
+	parameterAddToHeaderOrQuery(localVarFormParams, "applicant_id", r.applicantId, "", "")
+	parameterAddToHeaderOrQuery(localVarFormParams, "type", r.type_, "", "")
 	var fileLocalVarFormFileName string
 	var fileLocalVarFileName string
 	var fileLocalVarFileBytes []byte
@@ -5107,13 +5112,13 @@ func (a *DefaultAPIService) UploadDocumentExecute(r ApiUploadDocumentRequest) (*
 		formFiles = append(formFiles, formFile{fileBytes: fileLocalVarFileBytes, fileName: fileLocalVarFileName, formFileName: fileLocalVarFormFileName})
 	}
 	if r.side != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "side", r.side, "")
+		parameterAddToHeaderOrQuery(localVarFormParams, "side", r.side, "", "")
 	}
 	if r.issuingCountry != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "issuing_country", r.issuingCountry, "")
+		parameterAddToHeaderOrQuery(localVarFormParams, "issuing_country", r.issuingCountry, "", "")
 	}
 	if r.validateImageQuality != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "validate_image_quality", r.validateImageQuality, "")
+		parameterAddToHeaderOrQuery(localVarFormParams, "validate_image_quality", r.validateImageQuality, "", "")
 	}
 	if r.location != nil {
 		paramJson, err := parameterToJson(*r.location)
@@ -5270,7 +5275,7 @@ func (a *DefaultAPIService) UploadLivePhotoExecute(r ApiUploadLivePhotoRequest) 
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	parameterAddToHeaderOrQuery(localVarFormParams, "applicant_id", r.applicantId, "")
+	parameterAddToHeaderOrQuery(localVarFormParams, "applicant_id", r.applicantId, "", "")
 	var fileLocalVarFormFileName string
 	var fileLocalVarFileName string
 	var fileLocalVarFileBytes []byte
@@ -5287,7 +5292,7 @@ func (a *DefaultAPIService) UploadLivePhotoExecute(r ApiUploadLivePhotoRequest) 
 		formFiles = append(formFiles, formFile{fileBytes: fileLocalVarFileBytes, fileName: fileLocalVarFileName, formFileName: fileLocalVarFormFileName})
 	}
 	if r.advancedValidation != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "advanced_validation", r.advancedValidation, "")
+		parameterAddToHeaderOrQuery(localVarFormParams, "advanced_validation", r.advancedValidation, "", "")
 	}
 	if r.ctx != nil {
 		// API Key Authentication
