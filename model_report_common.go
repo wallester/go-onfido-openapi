@@ -89,7 +89,7 @@ func (o *ReportCommon) GetReadOnlyOk() (*interface{}, bool) {
 
 // HasReadOnly returns a boolean if a field has been set.
 func (o *ReportCommon) HasReadOnly() bool {
-	if o != nil && IsNil(o.ReadOnly) {
+	if o != nil && !IsNil(o.ReadOnly) {
 		return true
 	}
 

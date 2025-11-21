@@ -61,6 +61,9 @@ properties:
       language:
         type: string
         description: The code for the language when the workflow run is acessed using the link.
+  sdk_token:
+    type: string
+    description: Client token to use when loading this workflow run in the Onfido SDK.
   created_at:
     type: string
     format: date-time

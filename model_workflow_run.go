@@ -41,6 +41,8 @@ type WorkflowRun struct {
 	// Tags or labels assigned to the workflow run.
 	Tags []string         `json:"tags,omitempty"`
 	Link *WorkflowRunLink `json:"link,omitempty"`
+	// Client token to use when loading this workflow run in the Onfido SDK.
+	SdkToken *string `json:"sdk_token,omitempty"`
 	// The date and time when the Workflow Run was created.
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// The date and time when the Workflow Run was last updated.
@@ -416,6 +418,38 @@ func (o *WorkflowRun) SetLink(v WorkflowRunLink) {
 	o.Link = &v
 }
 
+// GetSdkToken returns the SdkToken field value if set, zero value otherwise.
+func (o *WorkflowRun) GetSdkToken() string {
+	if o == nil || IsNil(o.SdkToken) {
+		var ret string
+		return ret
+	}
+	return *o.SdkToken
+}
+
+// GetSdkTokenOk returns a tuple with the SdkToken field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *WorkflowRun) GetSdkTokenOk() (*string, bool) {
+	if o == nil || IsNil(o.SdkToken) {
+		return nil, false
+	}
+	return o.SdkToken, true
+}
+
+// HasSdkToken returns a boolean if a field has been set.
+func (o *WorkflowRun) HasSdkToken() bool {
+	if o != nil && !IsNil(o.SdkToken) {
+		return true
+	}
+
+	return false
+}
+
+// SetSdkToken gets a reference to the given string and assigns it to the SdkToken field.
+func (o *WorkflowRun) SetSdkToken(v string) {
+	o.SdkToken = &v
+}
+
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *WorkflowRun) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
@@ -522,6 +556,9 @@ func (o WorkflowRun) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Link) {
 		toSerialize["link"] = o.Link
+	}
+	if !IsNil(o.SdkToken) {
+		toSerialize["sdk_token"] = o.SdkToken
 	}
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
