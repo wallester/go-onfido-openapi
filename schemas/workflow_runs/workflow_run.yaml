@@ -10,7 +10,7 @@ properties:
     type: string
     description: The unique identifier for the Workflow.
   workflow_version_id:
-    type: string
+    type: integer
     description: The identifier for the Workflow version.
   dashboard_url:
     type: string

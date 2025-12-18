@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **Id** | Pointer to **string** | The unique identifier for the Workflow Run. | [optional] 
 **ApplicantId** | Pointer to **string** | The unique identifier for the Applicant. | [optional] 
 **WorkflowId** | Pointer to **string** | The unique identifier for the Workflow. | [optional] 
-**WorkflowVersionId** | Pointer to **string** | The identifier for the Workflow version. | [optional] 
+**WorkflowVersionId** | Pointer to **int32** | The identifier for the Workflow version. | [optional] 
 **DashboardUrl** | Pointer to **string** | The URL for viewing the Workflow Run results on your Onfido Dashboard. | [optional] 
 **Status** | Pointer to **string** | The status of the Workflow Run. Possible values are &#39;processing&#39;, &#39;awaiting_input&#39;, &#39;approved&#39;, &#39;declined&#39;, &#39;review&#39;, &#39;abandoned&#39; and &#39;error&#39;. | [optional] 
 **Output** | Pointer to **map[string]interface{}** | Output object contains all of the properties configured on the Workflow version. | [optional] 
@@ -115,20 +115,20 @@ HasWorkflowId returns a boolean if a field has been set.
 
 ### GetWorkflowVersionId
 
-`func (o *WorkflowRun) GetWorkflowVersionId() string`
+`func (o *WorkflowRun) GetWorkflowVersionId() int32`
 
 GetWorkflowVersionId returns the WorkflowVersionId field if non-nil, zero value otherwise.
 
 ### GetWorkflowVersionIdOk
 
-`func (o *WorkflowRun) GetWorkflowVersionIdOk() (*string, bool)`
+`func (o *WorkflowRun) GetWorkflowVersionIdOk() (*int32, bool)`
 
 GetWorkflowVersionIdOk returns a tuple with the WorkflowVersionId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetWorkflowVersionId
 
-`func (o *WorkflowRun) SetWorkflowVersionId(v string)`
+`func (o *WorkflowRun) SetWorkflowVersionId(v int32)`
 
 SetWorkflowVersionId sets WorkflowVersionId field to given value.
 
