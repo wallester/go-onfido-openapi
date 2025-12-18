@@ -28,7 +28,7 @@ type WorkflowRun struct {
 	// The unique identifier for the Workflow.
 	WorkflowId *string `json:"workflow_id,omitempty"`
 	// The identifier for the Workflow version.
-	WorkflowVersionId *string `json:"workflow_version_id,omitempty"`
+	WorkflowVersionId *int32 `json:"workflow_version_id,omitempty"`
 	// The URL for viewing the Workflow Run results on your Onfido Dashboard.
 	DashboardUrl *string `json:"dashboard_url,omitempty"`
 	// The status of the Workflow Run. Possible values are 'processing', 'awaiting_input', 'approved', 'declined', 'review', 'abandoned' and 'error'.
@@ -163,9 +163,9 @@ func (o *WorkflowRun) SetWorkflowId(v string) {
 }
 
 // GetWorkflowVersionId returns the WorkflowVersionId field value if set, zero value otherwise.
-func (o *WorkflowRun) GetWorkflowVersionId() string {
+func (o *WorkflowRun) GetWorkflowVersionId() int32 {
 	if o == nil || IsNil(o.WorkflowVersionId) {
-		var ret string
+		var ret int32
 		return ret
 	}
 	return *o.WorkflowVersionId
@@ -173,7 +173,7 @@ func (o *WorkflowRun) GetWorkflowVersionId() string {
 
 // GetWorkflowVersionIdOk returns a tuple with the WorkflowVersionId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *WorkflowRun) GetWorkflowVersionIdOk() (*string, bool) {
+func (o *WorkflowRun) GetWorkflowVersionIdOk() (*int32, bool) {
 	if o == nil || IsNil(o.WorkflowVersionId) {
 		return nil, false
 	}
@@ -189,8 +189,8 @@ func (o *WorkflowRun) HasWorkflowVersionId() bool {
 	return false
 }
 
-// SetWorkflowVersionId gets a reference to the given string and assigns it to the WorkflowVersionId field.
-func (o *WorkflowRun) SetWorkflowVersionId(v string) {
+// SetWorkflowVersionId gets a reference to the given int32 and assigns it to the WorkflowVersionId field.
+func (o *WorkflowRun) SetWorkflowVersionId(v int32) {
 	o.WorkflowVersionId = &v
 }
 

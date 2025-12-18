@@ -1781,7 +1781,7 @@ components:
         updated_at: 2000-01-23T04:56:07.000+00:00
         sdk_token: sdk_token
         id: id
-        workflow_version_id: workflow_version_id
+        workflow_version_id: 0
         dashboard_url: dashboard_url
         status: status
       properties:
@@ -1796,7 +1796,7 @@ components:
           type: string
         workflow_version_id:
           description: The identifier for the Workflow version.
-          type: string
+          type: integer
         dashboard_url:
           description: The URL for viewing the Workflow Run results on your Onfido
             Dashboard.
