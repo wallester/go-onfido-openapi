@@ -1,4 +1,4 @@
-# Report
+# DeviceIntelligenceReport
 
 ## Properties
 
@@ -19,325 +19,325 @@ Name | Type | Description | Notes
 
 ## Methods
 
-### NewReport
+### NewDeviceIntelligenceReport
 
-`func NewReport(name string, ) *Report`
+`func NewDeviceIntelligenceReport(name string, ) *DeviceIntelligenceReport`
 
-NewReport instantiates a new Report object
+NewDeviceIntelligenceReport instantiates a new DeviceIntelligenceReport object
 This constructor will assign default values to properties that have it defined,
 and makes sure properties required by API are set, but the set of arguments
 will change when the set of required properties is changed
 
-### NewReportWithDefaults
+### NewDeviceIntelligenceReportWithDefaults
 
-`func NewReportWithDefaults() *Report`
+`func NewDeviceIntelligenceReportWithDefaults() *DeviceIntelligenceReport`
 
-NewReportWithDefaults instantiates a new Report object
+NewDeviceIntelligenceReportWithDefaults instantiates a new DeviceIntelligenceReport object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
 ### GetReadOnly
 
-`func (o *Report) GetReadOnly() interface{}`
+`func (o *DeviceIntelligenceReport) GetReadOnly() interface{}`
 
 GetReadOnly returns the ReadOnly field if non-nil, zero value otherwise.
 
 ### GetReadOnlyOk
 
-`func (o *Report) GetReadOnlyOk() (*interface{}, bool)`
+`func (o *DeviceIntelligenceReport) GetReadOnlyOk() (*interface{}, bool)`
 
 GetReadOnlyOk returns a tuple with the ReadOnly field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetReadOnly
 
-`func (o *Report) SetReadOnly(v interface{})`
+`func (o *DeviceIntelligenceReport) SetReadOnly(v interface{})`
 
 SetReadOnly sets ReadOnly field to given value.
 
 ### HasReadOnly
 
-`func (o *Report) HasReadOnly() bool`
+`func (o *DeviceIntelligenceReport) HasReadOnly() bool`
 
 HasReadOnly returns a boolean if a field has been set.
 
 ### SetReadOnlyNil
 
-`func (o *Report) SetReadOnlyNil(b bool)`
+`func (o *DeviceIntelligenceReport) SetReadOnlyNil(b bool)`
 
  SetReadOnlyNil sets the value for ReadOnly to be an explicit nil
 
 ### UnsetReadOnly
-`func (o *Report) UnsetReadOnly()`
+`func (o *DeviceIntelligenceReport) UnsetReadOnly()`
 
 UnsetReadOnly ensures that no value is present for ReadOnly, not even an explicit nil
 ### GetId
 
-`func (o *Report) GetId() string`
+`func (o *DeviceIntelligenceReport) GetId() string`
 
 GetId returns the Id field if non-nil, zero value otherwise.
 
 ### GetIdOk
 
-`func (o *Report) GetIdOk() (*string, bool)`
+`func (o *DeviceIntelligenceReport) GetIdOk() (*string, bool)`
 
 GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetId
 
-`func (o *Report) SetId(v string)`
+`func (o *DeviceIntelligenceReport) SetId(v string)`
 
 SetId sets Id field to given value.
 
 ### HasId
 
-`func (o *Report) HasId() bool`
+`func (o *DeviceIntelligenceReport) HasId() bool`
 
 HasId returns a boolean if a field has been set.
 
 ### GetCreatedAt
 
-`func (o *Report) GetCreatedAt() time.Time`
+`func (o *DeviceIntelligenceReport) GetCreatedAt() time.Time`
 
 GetCreatedAt returns the CreatedAt field if non-nil, zero value otherwise.
 
 ### GetCreatedAtOk
 
-`func (o *Report) GetCreatedAtOk() (*time.Time, bool)`
+`func (o *DeviceIntelligenceReport) GetCreatedAtOk() (*time.Time, bool)`
 
 GetCreatedAtOk returns a tuple with the CreatedAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCreatedAt
 
-`func (o *Report) SetCreatedAt(v time.Time)`
+`func (o *DeviceIntelligenceReport) SetCreatedAt(v time.Time)`
 
 SetCreatedAt sets CreatedAt field to given value.
 
 ### HasCreatedAt
 
-`func (o *Report) HasCreatedAt() bool`
+`func (o *DeviceIntelligenceReport) HasCreatedAt() bool`
 
 HasCreatedAt returns a boolean if a field has been set.
 
 ### GetHref
 
-`func (o *Report) GetHref() string`
+`func (o *DeviceIntelligenceReport) GetHref() string`
 
 GetHref returns the Href field if non-nil, zero value otherwise.
 
 ### GetHrefOk
 
-`func (o *Report) GetHrefOk() (*string, bool)`
+`func (o *DeviceIntelligenceReport) GetHrefOk() (*string, bool)`
 
 GetHrefOk returns a tuple with the Href field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetHref
 
-`func (o *Report) SetHref(v string)`
+`func (o *DeviceIntelligenceReport) SetHref(v string)`
 
 SetHref sets Href field to given value.
 
 ### HasHref
 
-`func (o *Report) HasHref() bool`
+`func (o *DeviceIntelligenceReport) HasHref() bool`
 
 HasHref returns a boolean if a field has been set.
 
 ### GetStatus
 
-`func (o *Report) GetStatus() string`
+`func (o *DeviceIntelligenceReport) GetStatus() string`
 
 GetStatus returns the Status field if non-nil, zero value otherwise.
 
 ### GetStatusOk
 
-`func (o *Report) GetStatusOk() (*string, bool)`
+`func (o *DeviceIntelligenceReport) GetStatusOk() (*string, bool)`
 
 GetStatusOk returns a tuple with the Status field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetStatus
 
-`func (o *Report) SetStatus(v string)`
+`func (o *DeviceIntelligenceReport) SetStatus(v string)`
 
 SetStatus sets Status field to given value.
 
 ### HasStatus
 
-`func (o *Report) HasStatus() bool`
+`func (o *DeviceIntelligenceReport) HasStatus() bool`
 
 HasStatus returns a boolean if a field has been set.
 
 ### GetResult
 
-`func (o *Report) GetResult() string`
+`func (o *DeviceIntelligenceReport) GetResult() string`
 
 GetResult returns the Result field if non-nil, zero value otherwise.
 
 ### GetResultOk
 
-`func (o *Report) GetResultOk() (*string, bool)`
+`func (o *DeviceIntelligenceReport) GetResultOk() (*string, bool)`
 
 GetResultOk returns a tuple with the Result field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetResult
 
-`func (o *Report) SetResult(v string)`
+`func (o *DeviceIntelligenceReport) SetResult(v string)`
 
 SetResult sets Result field to given value.
 
 ### HasResult
 
-`func (o *Report) HasResult() bool`
+`func (o *DeviceIntelligenceReport) HasResult() bool`
 
 HasResult returns a boolean if a field has been set.
 
 ### GetSubResult
 
-`func (o *Report) GetSubResult() string`
+`func (o *DeviceIntelligenceReport) GetSubResult() string`
 
 GetSubResult returns the SubResult field if non-nil, zero value otherwise.
 
 ### GetSubResultOk
 
-`func (o *Report) GetSubResultOk() (*string, bool)`
+`func (o *DeviceIntelligenceReport) GetSubResultOk() (*string, bool)`
 
 GetSubResultOk returns a tuple with the SubResult field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetSubResult
 
-`func (o *Report) SetSubResult(v string)`
+`func (o *DeviceIntelligenceReport) SetSubResult(v string)`
 
 SetSubResult sets SubResult field to given value.
 
 ### HasSubResult
 
-`func (o *Report) HasSubResult() bool`
+`func (o *DeviceIntelligenceReport) HasSubResult() bool`
 
 HasSubResult returns a boolean if a field has been set.
 
 ### GetCheckId
 
-`func (o *Report) GetCheckId() string`
+`func (o *DeviceIntelligenceReport) GetCheckId() string`
 
 GetCheckId returns the CheckId field if non-nil, zero value otherwise.
 
 ### GetCheckIdOk
 
-`func (o *Report) GetCheckIdOk() (*string, bool)`
+`func (o *DeviceIntelligenceReport) GetCheckIdOk() (*string, bool)`
 
 GetCheckIdOk returns a tuple with the CheckId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCheckId
 
-`func (o *Report) SetCheckId(v string)`
+`func (o *DeviceIntelligenceReport) SetCheckId(v string)`
 
 SetCheckId sets CheckId field to given value.
 
 ### HasCheckId
 
-`func (o *Report) HasCheckId() bool`
+`func (o *DeviceIntelligenceReport) HasCheckId() bool`
 
 HasCheckId returns a boolean if a field has been set.
 
 ### GetDocuments
 
-`func (o *Report) GetDocuments() []ReportDocument`
+`func (o *DeviceIntelligenceReport) GetDocuments() []ReportDocument`
 
 GetDocuments returns the Documents field if non-nil, zero value otherwise.
 
 ### GetDocumentsOk
 
-`func (o *Report) GetDocumentsOk() (*[]ReportDocument, bool)`
+`func (o *DeviceIntelligenceReport) GetDocumentsOk() (*[]ReportDocument, bool)`
 
 GetDocumentsOk returns a tuple with the Documents field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetDocuments
 
-`func (o *Report) SetDocuments(v []ReportDocument)`
+`func (o *DeviceIntelligenceReport) SetDocuments(v []ReportDocument)`
 
 SetDocuments sets Documents field to given value.
 
 ### HasDocuments
 
-`func (o *Report) HasDocuments() bool`
+`func (o *DeviceIntelligenceReport) HasDocuments() bool`
 
 HasDocuments returns a boolean if a field has been set.
 
 ### GetName
 
-`func (o *Report) GetName() string`
+`func (o *DeviceIntelligenceReport) GetName() string`
 
 GetName returns the Name field if non-nil, zero value otherwise.
 
 ### GetNameOk
 
-`func (o *Report) GetNameOk() (*string, bool)`
+`func (o *DeviceIntelligenceReport) GetNameOk() (*string, bool)`
 
 GetNameOk returns a tuple with the Name field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetName
 
-`func (o *Report) SetName(v string)`
+`func (o *DeviceIntelligenceReport) SetName(v string)`
 
 SetName sets Name field to given value.
 
 
 ### GetBreakdown
 
-`func (o *Report) GetBreakdown() DeviceIntelligenceBreakdown`
+`func (o *DeviceIntelligenceReport) GetBreakdown() DeviceIntelligenceBreakdown`
 
 GetBreakdown returns the Breakdown field if non-nil, zero value otherwise.
 
 ### GetBreakdownOk
 
-`func (o *Report) GetBreakdownOk() (*DeviceIntelligenceBreakdown, bool)`
+`func (o *DeviceIntelligenceReport) GetBreakdownOk() (*DeviceIntelligenceBreakdown, bool)`
 
 GetBreakdownOk returns a tuple with the Breakdown field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetBreakdown
 
-`func (o *Report) SetBreakdown(v DeviceIntelligenceBreakdown)`
+`func (o *DeviceIntelligenceReport) SetBreakdown(v DeviceIntelligenceBreakdown)`
 
 SetBreakdown sets Breakdown field to given value.
 
 ### HasBreakdown
 
-`func (o *Report) HasBreakdown() bool`
+`func (o *DeviceIntelligenceReport) HasBreakdown() bool`
 
 HasBreakdown returns a boolean if a field has been set.
 
 ### GetProperties
 
-`func (o *Report) GetProperties() DeviceIntelligenceProperties`
+`func (o *DeviceIntelligenceReport) GetProperties() DeviceIntelligenceProperties`
 
 GetProperties returns the Properties field if non-nil, zero value otherwise.
 
 ### GetPropertiesOk
 
-`func (o *Report) GetPropertiesOk() (*DeviceIntelligenceProperties, bool)`
+`func (o *DeviceIntelligenceReport) GetPropertiesOk() (*DeviceIntelligenceProperties, bool)`
 
 GetPropertiesOk returns a tuple with the Properties field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetProperties
 
-`func (o *Report) SetProperties(v DeviceIntelligenceProperties)`
+`func (o *DeviceIntelligenceReport) SetProperties(v DeviceIntelligenceProperties)`
 
 SetProperties sets Properties field to given value.
 
 ### HasProperties
 
-`func (o *Report) HasProperties() bool`
+`func (o *DeviceIntelligenceReport) HasProperties() bool`
 
 HasProperties returns a boolean if a field has been set.
 
