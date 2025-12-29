@@ -19,6 +19,7 @@ import (
 
 // Report - struct for Report
 type Report struct {
+	DeviceIntelligenceReport                    *DeviceIntelligenceReport
 	DocumentReport                              *DocumentReport
 	DocumentWithAddressInformationReport        *DocumentWithAddressInformationReport
 	DocumentWithDriverVerificationReport        *DocumentWithDriverVerificationReport
@@ -34,6 +35,13 @@ type Report struct {
 	WatchlistPepsOnlyReport                     *WatchlistPepsOnlyReport
 	WatchlistSanctionsOnlyReport                *WatchlistSanctionsOnlyReport
 	WatchlistStandardReport                     *WatchlistStandardReport
+}
+
+// DeviceIntelligenceReportAsReport is a convenience function that returns DeviceIntelligenceReport wrapped in Report
+func DeviceIntelligenceReportAsReport(v *DeviceIntelligenceReport) Report {
+	return Report{
+		DeviceIntelligenceReport: v,
+	}
 }
 
 // DocumentReportAsReport is a convenience function that returns DocumentReport wrapped in Report
@@ -145,6 +153,23 @@ func WatchlistStandardReportAsReport(v *WatchlistStandardReport) Report {
 func (dst *Report) UnmarshalJSON(data []byte) error {
 	var err error
 	match := 0
+	// try to unmarshal data into DeviceIntelligenceReport
+	err = newStrictDecoder(data).Decode(&dst.DeviceIntelligenceReport)
+	if err == nil {
+		jsonDeviceIntelligenceReport, _ := json.Marshal(dst.DeviceIntelligenceReport)
+		if string(jsonDeviceIntelligenceReport) == "{}" { // empty struct
+			dst.DeviceIntelligenceReport = nil
+		} else {
+			if err = validator.Validate(dst.DeviceIntelligenceReport); err != nil {
+				dst.DeviceIntelligenceReport = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.DeviceIntelligenceReport = nil
+	}
+
 	// try to unmarshal data into DocumentReport
 	err = newStrictDecoder(data).Decode(&dst.DocumentReport)
 	if err == nil {
@@ -402,6 +427,7 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 
 	if match > 1 { // more than 1 match
 		// reset to nil
+		dst.DeviceIntelligenceReport = nil
 		dst.DocumentReport = nil
 		dst.DocumentWithAddressInformationReport = nil
 		dst.DocumentWithDriverVerificationReport = nil
@@ -428,6 +454,10 @@ func (dst *Report) UnmarshalJSON(data []byte) error {
 
 // Marshal data from the first non-nil pointers in the struct to JSON
 func (src Report) MarshalJSON() ([]byte, error) {
+	if src.DeviceIntelligenceReport != nil {
+		return json.Marshal(&src.DeviceIntelligenceReport)
+	}
+
 	if src.DocumentReport != nil {
 		return json.Marshal(&src.DocumentReport)
 	}
@@ -496,6 +526,10 @@ func (obj *Report) GetActualInstance() interface{} {
 	if obj == nil {
 		return nil
 	}
+	if obj.DeviceIntelligenceReport != nil {
+		return obj.DeviceIntelligenceReport
+	}
+
 	if obj.DocumentReport != nil {
 		return obj.DocumentReport
 	}
@@ -562,6 +596,10 @@ func (obj *Report) GetActualInstance() interface{} {
 
 // Get the actual instance value
 func (obj Report) GetActualInstanceValue() interface{} {
+	if obj.DeviceIntelligenceReport != nil {
+		return *obj.DeviceIntelligenceReport
+	}
+
 	if obj.DocumentReport != nil {
 		return *obj.DocumentReport
 	}

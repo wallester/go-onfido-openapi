@@ -14,6 +14,7 @@ oneOf:
   - $ref: watchlist_sanctions_only_report.yaml
   - $ref: right_to_work_report.yaml
   - $ref: identity_enhanced_report.yaml
+  - $ref: device_intelligence_report.yaml
 discriminator:
   propertyName: name
   mapping:
@@ -32,3 +33,4 @@ discriminator:
     watchlist_sanctions_only: watchlist_sanctions_only_report.yaml
     right_to_work: right_to_work_report.yaml
     identity_enhanced: identity_enhanced_report.yaml
+    device_intelligence: device_intelligence_report.yaml
