@@ -209,6 +209,7 @@ Class | Method | HTTP request | Description
  - [FacialSimilarityPhotoBreakdownVisualAuthenticityBreakdownSpoofingDetection](docs/FacialSimilarityPhotoBreakdownVisualAuthenticityBreakdownSpoofingDetection.md)
  - [FacialSimilarityPhotoBreakdownVisualAuthenticityBreakdownSpoofingDetectionProperties](docs/FacialSimilarityPhotoBreakdownVisualAuthenticityBreakdownSpoofingDetectionProperties.md)
  - [FacialSimilarityPhotoReport](docs/FacialSimilarityPhotoReport.md)
+ - [FacialSimilarityReportMedia](docs/FacialSimilarityReportMedia.md)
  - [FacialSimilarityVideoBreakdown](docs/FacialSimilarityVideoBreakdown.md)
  - [FacialSimilarityVideoBreakdownFaceComparison](docs/FacialSimilarityVideoBreakdownFaceComparison.md)
  - [FacialSimilarityVideoBreakdownImageIntegrity](docs/FacialSimilarityVideoBreakdownImageIntegrity.md)

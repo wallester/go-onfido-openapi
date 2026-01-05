@@ -40,6 +40,14 @@ type FacialSimilarityVideoReport struct {
 	CheckId *string `json:"check_id,omitempty"`
 	// Array of objects with document ids that were used in the Onfido engine. [ONLY POPULATED FOR DOCUMENT AND FACIAL SIMILARITY REPORTS]
 	Documents []ReportDocument `json:"documents,omitempty"`
+	// Array of objects with id photo ids that were used in the Onfido engine.
+	IdPhotos []FacialSimilarityReportMedia `json:"id_photos,omitempty"`
+	// Array of objects with live photo ids that were used in the Onfido engine.
+	LivePhotos []FacialSimilarityReportMedia `json:"live_photos,omitempty"`
+	// Array of objects with live video ids that were used in the Onfido engine.
+	LiveVideos []FacialSimilarityReportMedia `json:"live_videos,omitempty"`
+	// Array of objects with motion capture ids that were used in the Onfido engine.
+	MotionCaptures []FacialSimilarityReportMedia `json:"motion_captures,omitempty"`
 	// The name of the report type.
 	Name      string                          `json:"name"`
 	Breakdown *FacialSimilarityVideoBreakdown `json:"breakdown,omitempty"`
@@ -356,6 +364,134 @@ func (o *FacialSimilarityVideoReport) SetDocuments(v []ReportDocument) {
 	o.Documents = v
 }
 
+// GetIdPhotos returns the IdPhotos field value if set, zero value otherwise.
+func (o *FacialSimilarityVideoReport) GetIdPhotos() []FacialSimilarityReportMedia {
+	if o == nil || IsNil(o.IdPhotos) {
+		var ret []FacialSimilarityReportMedia
+		return ret
+	}
+	return o.IdPhotos
+}
+
+// GetIdPhotosOk returns a tuple with the IdPhotos field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FacialSimilarityVideoReport) GetIdPhotosOk() ([]FacialSimilarityReportMedia, bool) {
+	if o == nil || IsNil(o.IdPhotos) {
+		return nil, false
+	}
+	return o.IdPhotos, true
+}
+
+// HasIdPhotos returns a boolean if a field has been set.
+func (o *FacialSimilarityVideoReport) HasIdPhotos() bool {
+	if o != nil && !IsNil(o.IdPhotos) {
+		return true
+	}
+
+	return false
+}
+
+// SetIdPhotos gets a reference to the given []FacialSimilarityReportMedia and assigns it to the IdPhotos field.
+func (o *FacialSimilarityVideoReport) SetIdPhotos(v []FacialSimilarityReportMedia) {
+	o.IdPhotos = v
+}
+
+// GetLivePhotos returns the LivePhotos field value if set, zero value otherwise.
+func (o *FacialSimilarityVideoReport) GetLivePhotos() []FacialSimilarityReportMedia {
+	if o == nil || IsNil(o.LivePhotos) {
+		var ret []FacialSimilarityReportMedia
+		return ret
+	}
+	return o.LivePhotos
+}
+
+// GetLivePhotosOk returns a tuple with the LivePhotos field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FacialSimilarityVideoReport) GetLivePhotosOk() ([]FacialSimilarityReportMedia, bool) {
+	if o == nil || IsNil(o.LivePhotos) {
+		return nil, false
+	}
+	return o.LivePhotos, true
+}
+
+// HasLivePhotos returns a boolean if a field has been set.
+func (o *FacialSimilarityVideoReport) HasLivePhotos() bool {
+	if o != nil && !IsNil(o.LivePhotos) {
+		return true
+	}
+
+	return false
+}
+
+// SetLivePhotos gets a reference to the given []FacialSimilarityReportMedia and assigns it to the LivePhotos field.
+func (o *FacialSimilarityVideoReport) SetLivePhotos(v []FacialSimilarityReportMedia) {
+	o.LivePhotos = v
+}
+
+// GetLiveVideos returns the LiveVideos field value if set, zero value otherwise.
+func (o *FacialSimilarityVideoReport) GetLiveVideos() []FacialSimilarityReportMedia {
+	if o == nil || IsNil(o.LiveVideos) {
+		var ret []FacialSimilarityReportMedia
+		return ret
+	}
+	return o.LiveVideos
+}
+
+// GetLiveVideosOk returns a tuple with the LiveVideos field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FacialSimilarityVideoReport) GetLiveVideosOk() ([]FacialSimilarityReportMedia, bool) {
+	if o == nil || IsNil(o.LiveVideos) {
+		return nil, false
+	}
+	return o.LiveVideos, true
+}
+
+// HasLiveVideos returns a boolean if a field has been set.
+func (o *FacialSimilarityVideoReport) HasLiveVideos() bool {
+	if o != nil && !IsNil(o.LiveVideos) {
+		return true
+	}
+
+	return false
+}
+
+// SetLiveVideos gets a reference to the given []FacialSimilarityReportMedia and assigns it to the LiveVideos field.
+func (o *FacialSimilarityVideoReport) SetLiveVideos(v []FacialSimilarityReportMedia) {
+	o.LiveVideos = v
+}
+
+// GetMotionCaptures returns the MotionCaptures field value if set, zero value otherwise.
+func (o *FacialSimilarityVideoReport) GetMotionCaptures() []FacialSimilarityReportMedia {
+	if o == nil || IsNil(o.MotionCaptures) {
+		var ret []FacialSimilarityReportMedia
+		return ret
+	}
+	return o.MotionCaptures
+}
+
+// GetMotionCapturesOk returns a tuple with the MotionCaptures field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FacialSimilarityVideoReport) GetMotionCapturesOk() ([]FacialSimilarityReportMedia, bool) {
+	if o == nil || IsNil(o.MotionCaptures) {
+		return nil, false
+	}
+	return o.MotionCaptures, true
+}
+
+// HasMotionCaptures returns a boolean if a field has been set.
+func (o *FacialSimilarityVideoReport) HasMotionCaptures() bool {
+	if o != nil && !IsNil(o.MotionCaptures) {
+		return true
+	}
+
+	return false
+}
+
+// SetMotionCaptures gets a reference to the given []FacialSimilarityReportMedia and assigns it to the MotionCaptures field.
+func (o *FacialSimilarityVideoReport) SetMotionCaptures(v []FacialSimilarityReportMedia) {
+	o.MotionCaptures = v
+}
+
 // GetName returns the Name field value
 func (o *FacialSimilarityVideoReport) GetName() string {
 	if o == nil {
@@ -480,6 +616,18 @@ func (o FacialSimilarityVideoReport) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Documents) {
 		toSerialize["documents"] = o.Documents
+	}
+	if !IsNil(o.IdPhotos) {
+		toSerialize["id_photos"] = o.IdPhotos
+	}
+	if !IsNil(o.LivePhotos) {
+		toSerialize["live_photos"] = o.LivePhotos
+	}
+	if !IsNil(o.LiveVideos) {
+		toSerialize["live_videos"] = o.LiveVideos
+	}
+	if !IsNil(o.MotionCaptures) {
+		toSerialize["motion_captures"] = o.MotionCaptures
 	}
 	toSerialize["name"] = o.Name
 	if !IsNil(o.Breakdown) {

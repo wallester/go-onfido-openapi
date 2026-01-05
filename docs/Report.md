@@ -13,6 +13,10 @@ Name | Type | Description | Notes
 **SubResult** | Pointer to **string** | The sub_result of the report. It gives a more detailed result for document reports only, and will be null otherwise. Read-only. | [optional] [readonly] 
 **CheckId** | Pointer to **string** | The ID of the check to which the report belongs. Read-only. | [optional] [readonly] 
 **Documents** | Pointer to [**[]ReportDocument**](ReportDocument.md) | Array of objects with document ids that were used in the Onfido engine. [ONLY POPULATED FOR DOCUMENT AND FACIAL SIMILARITY REPORTS] | [optional] 
+**IdPhotos** | Pointer to [**[]FacialSimilarityReportMedia**](FacialSimilarityReportMedia.md) | Array of objects with id photo ids that were used in the Onfido engine. | [optional] 
+**LivePhotos** | Pointer to [**[]FacialSimilarityReportMedia**](FacialSimilarityReportMedia.md) | Array of objects with live photo ids that were used in the Onfido engine. | [optional] 
+**LiveVideos** | Pointer to [**[]FacialSimilarityReportMedia**](FacialSimilarityReportMedia.md) | Array of objects with live video ids that were used in the Onfido engine. | [optional] 
+**MotionCaptures** | Pointer to [**[]FacialSimilarityReportMedia**](FacialSimilarityReportMedia.md) | Array of objects with motion capture ids that were used in the Onfido engine. | [optional] 
 **Name** | **string** | The name of the report type. | 
 **Breakdown** | Pointer to [**DeviceIntelligenceBreakdown**](DeviceIntelligenceBreakdown.md) |  | [optional] 
 **Properties** | Pointer to [**DeviceIntelligenceProperties**](DeviceIntelligenceProperties.md) |  | [optional] 
@@ -270,6 +274,106 @@ SetDocuments sets Documents field to given value.
 `func (o *Report) HasDocuments() bool`
 
 HasDocuments returns a boolean if a field has been set.
+
+### GetIdPhotos
+
+`func (o *Report) GetIdPhotos() []FacialSimilarityReportMedia`
+
+GetIdPhotos returns the IdPhotos field if non-nil, zero value otherwise.
+
+### GetIdPhotosOk
+
+`func (o *Report) GetIdPhotosOk() (*[]FacialSimilarityReportMedia, bool)`
+
+GetIdPhotosOk returns a tuple with the IdPhotos field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIdPhotos
+
+`func (o *Report) SetIdPhotos(v []FacialSimilarityReportMedia)`
+
+SetIdPhotos sets IdPhotos field to given value.
+
+### HasIdPhotos
+
+`func (o *Report) HasIdPhotos() bool`
+
+HasIdPhotos returns a boolean if a field has been set.
+
+### GetLivePhotos
+
+`func (o *Report) GetLivePhotos() []FacialSimilarityReportMedia`
+
+GetLivePhotos returns the LivePhotos field if non-nil, zero value otherwise.
+
+### GetLivePhotosOk
+
+`func (o *Report) GetLivePhotosOk() (*[]FacialSimilarityReportMedia, bool)`
+
+GetLivePhotosOk returns a tuple with the LivePhotos field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLivePhotos
+
+`func (o *Report) SetLivePhotos(v []FacialSimilarityReportMedia)`
+
+SetLivePhotos sets LivePhotos field to given value.
+
+### HasLivePhotos
+
+`func (o *Report) HasLivePhotos() bool`
+
+HasLivePhotos returns a boolean if a field has been set.
+
+### GetLiveVideos
+
+`func (o *Report) GetLiveVideos() []FacialSimilarityReportMedia`
+
+GetLiveVideos returns the LiveVideos field if non-nil, zero value otherwise.
+
+### GetLiveVideosOk
+
+`func (o *Report) GetLiveVideosOk() (*[]FacialSimilarityReportMedia, bool)`
+
+GetLiveVideosOk returns a tuple with the LiveVideos field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLiveVideos
+
+`func (o *Report) SetLiveVideos(v []FacialSimilarityReportMedia)`
+
+SetLiveVideos sets LiveVideos field to given value.
+
+### HasLiveVideos
+
+`func (o *Report) HasLiveVideos() bool`
+
+HasLiveVideos returns a boolean if a field has been set.
+
+### GetMotionCaptures
+
+`func (o *Report) GetMotionCaptures() []FacialSimilarityReportMedia`
+
+GetMotionCaptures returns the MotionCaptures field if non-nil, zero value otherwise.
+
+### GetMotionCapturesOk
+
+`func (o *Report) GetMotionCapturesOk() (*[]FacialSimilarityReportMedia, bool)`
+
+GetMotionCapturesOk returns a tuple with the MotionCaptures field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMotionCaptures
+
+`func (o *Report) SetMotionCaptures(v []FacialSimilarityReportMedia)`
+
+SetMotionCaptures sets MotionCaptures field to given value.
+
+### HasMotionCaptures
+
+`func (o *Report) HasMotionCaptures() bool`
+
+HasMotionCaptures returns a boolean if a field has been set.
 
 ### GetName
 
