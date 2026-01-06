@@ -24,6 +24,8 @@ type FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties st
 	Score *float32 `json:"score,omitempty"`
 	// The UUID for the document containing the extracted face that was used for face matching.
 	DocumentId *string `json:"document_id,omitempty"`
+	// The UUID for the live photo that was used for face matching.
+	LivePhotoId *string `json:"live_photo_id,omitempty"`
 }
 
 // NewFacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties instantiates a new FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties object
@@ -107,6 +109,38 @@ func (o *FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchPropertie
 	o.DocumentId = &v
 }
 
+// GetLivePhotoId returns the LivePhotoId field value if set, zero value otherwise.
+func (o *FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties) GetLivePhotoId() string {
+	if o == nil || IsNil(o.LivePhotoId) {
+		var ret string
+		return ret
+	}
+	return *o.LivePhotoId
+}
+
+// GetLivePhotoIdOk returns a tuple with the LivePhotoId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties) GetLivePhotoIdOk() (*string, bool) {
+	if o == nil || IsNil(o.LivePhotoId) {
+		return nil, false
+	}
+	return o.LivePhotoId, true
+}
+
+// HasLivePhotoId returns a boolean if a field has been set.
+func (o *FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties) HasLivePhotoId() bool {
+	if o != nil && !IsNil(o.LivePhotoId) {
+		return true
+	}
+
+	return false
+}
+
+// SetLivePhotoId gets a reference to the given string and assigns it to the LivePhotoId field.
+func (o *FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties) SetLivePhotoId(v string) {
+	o.LivePhotoId = &v
+}
+
 func (o FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -122,6 +156,9 @@ func (o FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties
 	}
 	if !IsNil(o.DocumentId) {
 		toSerialize["document_id"] = o.DocumentId
+	}
+	if !IsNil(o.LivePhotoId) {
+		toSerialize["live_photo_id"] = o.LivePhotoId
 	}
 	return toSerialize, nil
 }

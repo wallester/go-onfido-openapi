@@ -16,3 +16,6 @@ generate:
 	--additional-properties packageName=onfido_openapi,useTags=true \
 	--git-user-id wallester \
 	--git-repo-id go-onfido-openapi
+	@echo "Patching model_report.go ..."
+	go run -mod=mod scripts/patch_model_report.go
+	go mod tidy && go mod vendor
