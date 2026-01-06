@@ -14,7 +14,6 @@ package onfido_openapi
 import (
 	"encoding/json"
 	"fmt"
-	"gopkg.in/validator.v2"
 )
 
 // Report - struct for Report
@@ -149,306 +148,66 @@ func WatchlistStandardReportAsReport(v *WatchlistStandardReport) Report {
 	}
 }
 
-// Unmarshal JSON data into one of the pointers in the struct
+// Unmarshal JSON data into one of the pointers in the struct using the 'name' discriminator
 func (dst *Report) UnmarshalJSON(data []byte) error {
-	var err error
-	match := 0
-	// try to unmarshal data into DeviceIntelligenceReport
-	err = newStrictDecoder(data).Decode(&dst.DeviceIntelligenceReport)
-	if err == nil {
-		jsonDeviceIntelligenceReport, _ := json.Marshal(dst.DeviceIntelligenceReport)
-		if string(jsonDeviceIntelligenceReport) == "{}" { // empty struct
-			dst.DeviceIntelligenceReport = nil
-		} else {
-			if err = validator.Validate(dst.DeviceIntelligenceReport); err != nil {
-				dst.DeviceIntelligenceReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.DeviceIntelligenceReport = nil
+	var discriminator struct {
+		Name string `json:"name"`
+	}
+	if err := json.Unmarshal(data, &discriminator); err != nil {
+		return fmt.Errorf("failed to extract discriminator 'name': %w", err)
 	}
 
-	// try to unmarshal data into DocumentReport
-	err = newStrictDecoder(data).Decode(&dst.DocumentReport)
-	if err == nil {
-		jsonDocumentReport, _ := json.Marshal(dst.DocumentReport)
-		if string(jsonDocumentReport) == "{}" { // empty struct
-			dst.DocumentReport = nil
-		} else {
-			if err = validator.Validate(dst.DocumentReport); err != nil {
-				dst.DocumentReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.DocumentReport = nil
-	}
-
-	// try to unmarshal data into DocumentWithAddressInformationReport
-	err = newStrictDecoder(data).Decode(&dst.DocumentWithAddressInformationReport)
-	if err == nil {
-		jsonDocumentWithAddressInformationReport, _ := json.Marshal(dst.DocumentWithAddressInformationReport)
-		if string(jsonDocumentWithAddressInformationReport) == "{}" { // empty struct
-			dst.DocumentWithAddressInformationReport = nil
-		} else {
-			if err = validator.Validate(dst.DocumentWithAddressInformationReport); err != nil {
-				dst.DocumentWithAddressInformationReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.DocumentWithAddressInformationReport = nil
-	}
-
-	// try to unmarshal data into DocumentWithDriverVerificationReport
-	err = newStrictDecoder(data).Decode(&dst.DocumentWithDriverVerificationReport)
-	if err == nil {
-		jsonDocumentWithDriverVerificationReport, _ := json.Marshal(dst.DocumentWithDriverVerificationReport)
-		if string(jsonDocumentWithDriverVerificationReport) == "{}" { // empty struct
-			dst.DocumentWithDriverVerificationReport = nil
-		} else {
-			if err = validator.Validate(dst.DocumentWithDriverVerificationReport); err != nil {
-				dst.DocumentWithDriverVerificationReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.DocumentWithDriverVerificationReport = nil
-	}
-
-	// try to unmarshal data into DocumentWithDrivingLicenceInformationReport
-	err = newStrictDecoder(data).Decode(&dst.DocumentWithDrivingLicenceInformationReport)
-	if err == nil {
-		jsonDocumentWithDrivingLicenceInformationReport, _ := json.Marshal(dst.DocumentWithDrivingLicenceInformationReport)
-		if string(jsonDocumentWithDrivingLicenceInformationReport) == "{}" { // empty struct
-			dst.DocumentWithDrivingLicenceInformationReport = nil
-		} else {
-			if err = validator.Validate(dst.DocumentWithDrivingLicenceInformationReport); err != nil {
-				dst.DocumentWithDrivingLicenceInformationReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.DocumentWithDrivingLicenceInformationReport = nil
-	}
-
-	// try to unmarshal data into FacialSimilarityPhotoReport
-	err = newStrictDecoder(data).Decode(&dst.FacialSimilarityPhotoReport)
-	if err == nil {
-		jsonFacialSimilarityPhotoReport, _ := json.Marshal(dst.FacialSimilarityPhotoReport)
-		if string(jsonFacialSimilarityPhotoReport) == "{}" { // empty struct
-			dst.FacialSimilarityPhotoReport = nil
-		} else {
-			if err = validator.Validate(dst.FacialSimilarityPhotoReport); err != nil {
-				dst.FacialSimilarityPhotoReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.FacialSimilarityPhotoReport = nil
-	}
-
-	// try to unmarshal data into FacialSimilarityVideoReport
-	err = newStrictDecoder(data).Decode(&dst.FacialSimilarityVideoReport)
-	if err == nil {
-		jsonFacialSimilarityVideoReport, _ := json.Marshal(dst.FacialSimilarityVideoReport)
-		if string(jsonFacialSimilarityVideoReport) == "{}" { // empty struct
-			dst.FacialSimilarityVideoReport = nil
-		} else {
-			if err = validator.Validate(dst.FacialSimilarityVideoReport); err != nil {
-				dst.FacialSimilarityVideoReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.FacialSimilarityVideoReport = nil
-	}
-
-	// try to unmarshal data into IdentityEnhancedReport
-	err = newStrictDecoder(data).Decode(&dst.IdentityEnhancedReport)
-	if err == nil {
-		jsonIdentityEnhancedReport, _ := json.Marshal(dst.IdentityEnhancedReport)
-		if string(jsonIdentityEnhancedReport) == "{}" { // empty struct
-			dst.IdentityEnhancedReport = nil
-		} else {
-			if err = validator.Validate(dst.IdentityEnhancedReport); err != nil {
-				dst.IdentityEnhancedReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.IdentityEnhancedReport = nil
-	}
-
-	// try to unmarshal data into KnownFacesReport
-	err = newStrictDecoder(data).Decode(&dst.KnownFacesReport)
-	if err == nil {
-		jsonKnownFacesReport, _ := json.Marshal(dst.KnownFacesReport)
-		if string(jsonKnownFacesReport) == "{}" { // empty struct
-			dst.KnownFacesReport = nil
-		} else {
-			if err = validator.Validate(dst.KnownFacesReport); err != nil {
-				dst.KnownFacesReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.KnownFacesReport = nil
-	}
-
-	// try to unmarshal data into PhotoFullyAutoReport
-	err = newStrictDecoder(data).Decode(&dst.PhotoFullyAutoReport)
-	if err == nil {
-		jsonPhotoFullyAutoReport, _ := json.Marshal(dst.PhotoFullyAutoReport)
-		if string(jsonPhotoFullyAutoReport) == "{}" { // empty struct
-			dst.PhotoFullyAutoReport = nil
-		} else {
-			if err = validator.Validate(dst.PhotoFullyAutoReport); err != nil {
-				dst.PhotoFullyAutoReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.PhotoFullyAutoReport = nil
-	}
-
-	// try to unmarshal data into ProofOfAddressReport
-	err = newStrictDecoder(data).Decode(&dst.ProofOfAddressReport)
-	if err == nil {
-		jsonProofOfAddressReport, _ := json.Marshal(dst.ProofOfAddressReport)
-		if string(jsonProofOfAddressReport) == "{}" { // empty struct
-			dst.ProofOfAddressReport = nil
-		} else {
-			if err = validator.Validate(dst.ProofOfAddressReport); err != nil {
-				dst.ProofOfAddressReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.ProofOfAddressReport = nil
-	}
-
-	// try to unmarshal data into RightToWorkReport
-	err = newStrictDecoder(data).Decode(&dst.RightToWorkReport)
-	if err == nil {
-		jsonRightToWorkReport, _ := json.Marshal(dst.RightToWorkReport)
-		if string(jsonRightToWorkReport) == "{}" { // empty struct
-			dst.RightToWorkReport = nil
-		} else {
-			if err = validator.Validate(dst.RightToWorkReport); err != nil {
-				dst.RightToWorkReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.RightToWorkReport = nil
-	}
-
-	// try to unmarshal data into WatchlistEnhancedReport
-	err = newStrictDecoder(data).Decode(&dst.WatchlistEnhancedReport)
-	if err == nil {
-		jsonWatchlistEnhancedReport, _ := json.Marshal(dst.WatchlistEnhancedReport)
-		if string(jsonWatchlistEnhancedReport) == "{}" { // empty struct
-			dst.WatchlistEnhancedReport = nil
-		} else {
-			if err = validator.Validate(dst.WatchlistEnhancedReport); err != nil {
-				dst.WatchlistEnhancedReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.WatchlistEnhancedReport = nil
-	}
-
-	// try to unmarshal data into WatchlistPepsOnlyReport
-	err = newStrictDecoder(data).Decode(&dst.WatchlistPepsOnlyReport)
-	if err == nil {
-		jsonWatchlistPepsOnlyReport, _ := json.Marshal(dst.WatchlistPepsOnlyReport)
-		if string(jsonWatchlistPepsOnlyReport) == "{}" { // empty struct
-			dst.WatchlistPepsOnlyReport = nil
-		} else {
-			if err = validator.Validate(dst.WatchlistPepsOnlyReport); err != nil {
-				dst.WatchlistPepsOnlyReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.WatchlistPepsOnlyReport = nil
-	}
-
-	// try to unmarshal data into WatchlistSanctionsOnlyReport
-	err = newStrictDecoder(data).Decode(&dst.WatchlistSanctionsOnlyReport)
-	if err == nil {
-		jsonWatchlistSanctionsOnlyReport, _ := json.Marshal(dst.WatchlistSanctionsOnlyReport)
-		if string(jsonWatchlistSanctionsOnlyReport) == "{}" { // empty struct
-			dst.WatchlistSanctionsOnlyReport = nil
-		} else {
-			if err = validator.Validate(dst.WatchlistSanctionsOnlyReport); err != nil {
-				dst.WatchlistSanctionsOnlyReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.WatchlistSanctionsOnlyReport = nil
-	}
-
-	// try to unmarshal data into WatchlistStandardReport
-	err = newStrictDecoder(data).Decode(&dst.WatchlistStandardReport)
-	if err == nil {
-		jsonWatchlistStandardReport, _ := json.Marshal(dst.WatchlistStandardReport)
-		if string(jsonWatchlistStandardReport) == "{}" { // empty struct
-			dst.WatchlistStandardReport = nil
-		} else {
-			if err = validator.Validate(dst.WatchlistStandardReport); err != nil {
-				dst.WatchlistStandardReport = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.WatchlistStandardReport = nil
-	}
-
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.DeviceIntelligenceReport = nil
-		dst.DocumentReport = nil
-		dst.DocumentWithAddressInformationReport = nil
-		dst.DocumentWithDriverVerificationReport = nil
-		dst.DocumentWithDrivingLicenceInformationReport = nil
-		dst.FacialSimilarityPhotoReport = nil
-		dst.FacialSimilarityVideoReport = nil
-		dst.IdentityEnhancedReport = nil
-		dst.KnownFacesReport = nil
-		dst.PhotoFullyAutoReport = nil
-		dst.ProofOfAddressReport = nil
-		dst.RightToWorkReport = nil
-		dst.WatchlistEnhancedReport = nil
-		dst.WatchlistPepsOnlyReport = nil
-		dst.WatchlistSanctionsOnlyReport = nil
-		dst.WatchlistStandardReport = nil
-
-		return fmt.Errorf("data matches more than one schema in oneOf(Report)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("data failed to match schemas in oneOf(Report)")
+	switch discriminator.Name {
+	case "device_intelligence":
+		dst.DeviceIntelligenceReport = &DeviceIntelligenceReport{}
+		return json.Unmarshal(data, dst.DeviceIntelligenceReport)
+	case "document":
+		dst.DocumentReport = &DocumentReport{}
+		return json.Unmarshal(data, dst.DocumentReport)
+	case "document_with_address_information":
+		dst.DocumentWithAddressInformationReport = &DocumentWithAddressInformationReport{}
+		return json.Unmarshal(data, dst.DocumentWithAddressInformationReport)
+	case "document_with_driver_verification":
+		dst.DocumentWithDriverVerificationReport = &DocumentWithDriverVerificationReport{}
+		return json.Unmarshal(data, dst.DocumentWithDriverVerificationReport)
+	case "document_with_driving_licence_information":
+		dst.DocumentWithDrivingLicenceInformationReport = &DocumentWithDrivingLicenceInformationReport{}
+		return json.Unmarshal(data, dst.DocumentWithDrivingLicenceInformationReport)
+	case "facial_similarity_photo":
+		dst.FacialSimilarityPhotoReport = &FacialSimilarityPhotoReport{}
+		return json.Unmarshal(data, dst.FacialSimilarityPhotoReport)
+	case "facial_similarity_video":
+		dst.FacialSimilarityVideoReport = &FacialSimilarityVideoReport{}
+		return json.Unmarshal(data, dst.FacialSimilarityVideoReport)
+	case "identity_enhanced":
+		dst.IdentityEnhancedReport = &IdentityEnhancedReport{}
+		return json.Unmarshal(data, dst.IdentityEnhancedReport)
+	case "known_faces":
+		dst.KnownFacesReport = &KnownFacesReport{}
+		return json.Unmarshal(data, dst.KnownFacesReport)
+	case "photo_fully_auto":
+		dst.PhotoFullyAutoReport = &PhotoFullyAutoReport{}
+		return json.Unmarshal(data, dst.PhotoFullyAutoReport)
+	case "proof_of_address":
+		dst.ProofOfAddressReport = &ProofOfAddressReport{}
+		return json.Unmarshal(data, dst.ProofOfAddressReport)
+	case "right_to_work":
+		dst.RightToWorkReport = &RightToWorkReport{}
+		return json.Unmarshal(data, dst.RightToWorkReport)
+	case "watchlist_enhanced":
+		dst.WatchlistEnhancedReport = &WatchlistEnhancedReport{}
+		return json.Unmarshal(data, dst.WatchlistEnhancedReport)
+	case "watchlist_peps_only":
+		dst.WatchlistPepsOnlyReport = &WatchlistPepsOnlyReport{}
+		return json.Unmarshal(data, dst.WatchlistPepsOnlyReport)
+	case "watchlist_sanctions_only":
+		dst.WatchlistSanctionsOnlyReport = &WatchlistSanctionsOnlyReport{}
+		return json.Unmarshal(data, dst.WatchlistSanctionsOnlyReport)
+	case "watchlist_standard":
+		dst.WatchlistStandardReport = &WatchlistStandardReport{}
+		return json.Unmarshal(data, dst.WatchlistStandardReport)
+	default:
+		return fmt.Errorf("unknown report type: %s", discriminator.Name)
 	}
 }
 

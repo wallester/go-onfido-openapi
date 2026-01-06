@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Score** | Pointer to **float32** | A floating point number between 0 and 1 that expresses how similar the two faces are, where 1 is a perfect match. | [optional] 
 **DocumentId** | Pointer to **string** | The UUID for the document containing the extracted face that was used for face matching. | [optional] 
+**LivePhotoId** | Pointer to **string** | The UUID for the live photo that was used for face matching. | [optional] 
 
 ## Methods
 
@@ -75,6 +76,31 @@ SetDocumentId sets DocumentId field to given value.
 `func (o *FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties) HasDocumentId() bool`
 
 HasDocumentId returns a boolean if a field has been set.
+
+### GetLivePhotoId
+
+`func (o *FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties) GetLivePhotoId() string`
+
+GetLivePhotoId returns the LivePhotoId field if non-nil, zero value otherwise.
+
+### GetLivePhotoIdOk
+
+`func (o *FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties) GetLivePhotoIdOk() (*string, bool)`
+
+GetLivePhotoIdOk returns a tuple with the LivePhotoId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLivePhotoId
+
+`func (o *FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties) SetLivePhotoId(v string)`
+
+SetLivePhotoId sets LivePhotoId field to given value.
+
+### HasLivePhotoId
+
+`func (o *FacialSimilarityPhotoBreakdownFaceComparisonBreakdownFaceMatchProperties) HasLivePhotoId() bool`
+
+HasLivePhotoId returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

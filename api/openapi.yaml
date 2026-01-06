@@ -1645,6 +1645,7 @@ components:
                   result: result
                   properties:
                     score: 0.8008282
+                    live_photo_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                     document_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             image_integrity:
               result: result
@@ -1701,6 +1702,7 @@ components:
                   result: result
                   properties:
                     score: 0.8008282
+                    live_photo_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                     document_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             image_integrity:
               result: result
@@ -2136,6 +2138,7 @@ components:
                 result: result
                 properties:
                   score: 0.8008282
+                  live_photo_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                   document_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           image_integrity:
             result: result
@@ -2397,6 +2400,7 @@ components:
               result: result
               properties:
                 score: 0.8008282
+                live_photo_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 document_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         image_integrity:
           result: result
@@ -3142,6 +3146,7 @@ components:
     facial_similarity_photo_breakdown_face_comparison_breakdown_face_match_properties:
       example:
         score: 0.8008282
+        live_photo_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         document_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         score:
@@ -3154,6 +3159,10 @@ components:
             was used for face matching.
           format: uuid
           type: string
+        live_photo_id:
+          description: The UUID for the live photo that was used for face matching.
+          format: uuid
+          type: string
       type: object
     facial_similarity_photo_breakdown_face_comparison_breakdown_face_match:
       description: Contains a score value under the properties bag.
@@ -3161,6 +3170,7 @@ components:
         result: result
         properties:
           score: 0.8008282
+          live_photo_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           document_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         result:
@@ -3174,6 +3184,7 @@ components:
           result: result
           properties:
             score: 0.8008282
+            live_photo_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             document_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         face_match:
@@ -3189,6 +3200,7 @@ components:
             result: result
             properties:
               score: 0.8008282
+              live_photo_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
               document_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         result:
