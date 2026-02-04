@@ -18,4 +18,6 @@ generate:
 	--git-repo-id go-onfido-openapi
 	@echo "Patching model_report.go ..."
 	go run -mod=mod scripts/patch_model_report.go
+	@echo "Disabling strict JSON decoding ..."
+	go run -mod=mod scripts/disable_strict_decoding.go
 	go mod tidy && go mod vendor

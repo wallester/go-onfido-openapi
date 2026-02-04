@@ -664,7 +664,7 @@ func (o *PhotoFullyAutoReport) UnmarshalJSON(data []byte) (err error) {
 	varPhotoFullyAutoReport := _PhotoFullyAutoReport{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
+	// decoder.DisallowUnknownFields() - disabled to allow unknown fields from Onfido API
 	err = decoder.Decode(&varPhotoFullyAutoReport)
 
 	if err != nil {

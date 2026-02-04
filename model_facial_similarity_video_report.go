@@ -664,7 +664,7 @@ func (o *FacialSimilarityVideoReport) UnmarshalJSON(data []byte) (err error) {
 	varFacialSimilarityVideoReport := _FacialSimilarityVideoReport{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
+	// decoder.DisallowUnknownFields() - disabled to allow unknown fields from Onfido API
 	err = decoder.Decode(&varFacialSimilarityVideoReport)
 
 	if err != nil {

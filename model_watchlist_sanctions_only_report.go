@@ -663,7 +663,7 @@ func (o *WatchlistSanctionsOnlyReport) UnmarshalJSON(data []byte) (err error) {
 	varWatchlistSanctionsOnlyReport := _WatchlistSanctionsOnlyReport{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
+	// decoder.DisallowUnknownFields() - disabled to allow unknown fields from Onfido API
 	err = decoder.Decode(&varWatchlistSanctionsOnlyReport)
 
 	if err != nil {

@@ -663,7 +663,7 @@ func (o *DocumentWithAddressInformationReport) UnmarshalJSON(data []byte) (err e
 	varDocumentWithAddressInformationReport := _DocumentWithAddressInformationReport{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
+	// decoder.DisallowUnknownFields() - disabled to allow unknown fields from Onfido API
 	err = decoder.Decode(&varDocumentWithAddressInformationReport)
 
 	if err != nil {

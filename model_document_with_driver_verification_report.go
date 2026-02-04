@@ -663,7 +663,7 @@ func (o *DocumentWithDriverVerificationReport) UnmarshalJSON(data []byte) (err e
 	varDocumentWithDriverVerificationReport := _DocumentWithDriverVerificationReport{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
+	// decoder.DisallowUnknownFields() - disabled to allow unknown fields from Onfido API
 	err = decoder.Decode(&varDocumentWithDriverVerificationReport)
 
 	if err != nil {
