@@ -663,7 +663,7 @@ func (o *DocumentReport) UnmarshalJSON(data []byte) (err error) {
 	varDocumentReport := _DocumentReport{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
+	// decoder.DisallowUnknownFields() - disabled to allow unknown fields from Onfido API
 	err = decoder.Decode(&varDocumentReport)
 
 	if err != nil {

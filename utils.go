@@ -352,7 +352,7 @@ type MappedNullable interface {
 // A wrapper for strict JSON decoding
 func newStrictDecoder(data []byte) *json.Decoder {
 	dec := json.NewDecoder(bytes.NewBuffer(data))
-	dec.DisallowUnknownFields()
+	// dec.DisallowUnknownFields() - disabled to allow unknown fields from Onfido API
 	return dec
 }
 
